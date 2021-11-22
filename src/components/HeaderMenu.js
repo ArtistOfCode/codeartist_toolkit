@@ -1,4 +1,4 @@
-import { IconBell, IconHelpCircle, IconSemiLogo } from '@douyinfe/semi-icons';
+import { IconGithubLogo, IconHelpCircle, IconSemiLogo } from '@douyinfe/semi-icons';
 import { Button, Nav } from '@douyinfe/semi-ui';
 import React from 'react';
 
@@ -16,7 +16,7 @@ const HeaderMenu = () =>
         <Nav.Footer>
             <Button
                 theme="borderless"
-                icon={<IconBell size="large" />}
+                icon={<IconHelpCircle size="large" />}
                 style={{
                     color: 'var(--semi-color-text-2)',
                     marginRight: '12px',
@@ -24,7 +24,7 @@ const HeaderMenu = () =>
             />
             <Button
                 theme="borderless"
-                icon={<IconHelpCircle size="large" />}
+                icon={<IconGithubLogo size="large" />}
                 style={{
                     color: 'var(--semi-color-text-2)',
                     marginRight: '12px',
