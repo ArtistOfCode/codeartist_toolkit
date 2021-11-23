@@ -4,7 +4,8 @@ import React from 'react';
 
 const operate = {
     url: (data, op) => op ? encodeURI(data) : decodeURI(data),
-    base64: (data, op) => { }
+    hex: (data, op) => op ? Buffer.from(data, 'utf-8').toString('hex') : Buffer.from(data, 'hex').toString('utf-8'),
+    base64: (data, op) => op ? Buffer.from(data).toString('base64') : Buffer.from(data, 'base64').toString(),
 }
 
 const encode = api => {
@@ -41,6 +42,9 @@ const TextEncode = () => {
                 <Form.RadioGroup field='type' span={24} label='编码方式：' type='button' buttonSize='middle' onChange={v => api.setValues({ leftData: null, rightData: null })}>
                     <Tooltip content='URL编码' position='bottom'>
                         <Radio value='url'>URL</Radio>
+                    </Tooltip>
+                    <Tooltip content='十六进制编码' position='bottom'>
+                        <Radio value='hex'>Hex</Radio>
                     </Tooltip>
                     <Tooltip content='Base64编码' position='bottom'>
                         <Radio value='base64'>Base64</Radio>
