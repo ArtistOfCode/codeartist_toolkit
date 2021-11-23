@@ -18,6 +18,7 @@ const SideMenu = () => {
                 items: [
                     { itemKey: '/encode/text', text: '文本类' },
                     { itemKey: '/encode/image', text: '图形类' },
+                    { itemKey: '/encode/qr', text: '二维码' },
                 ]
             },
             { itemKey: 'encrypt', text: '加密', icon: <IconKey size="large" /> },
