@@ -1,5 +1,5 @@
-import { IconArrowLeft, IconArrowRight, IconPlus } from '@douyinfe/semi-icons';
-import { Button, Col, Form, Radio, Row, Space, Toast, Tooltip } from "@douyinfe/semi-ui";
+import { IconArrowRight, IconPlus } from '@douyinfe/semi-icons';
+import { Button, Col, Form, Radio, Row, Space, Toast } from "@douyinfe/semi-ui";
 import React from 'react';
 
 const operate = {
