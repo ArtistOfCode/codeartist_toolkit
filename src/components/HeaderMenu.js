@@ -1,6 +1,8 @@
 import { IconGithubLogo, IconHelpCircle, IconSemiLogo } from '@douyinfe/semi-icons';
-import { Button, Nav } from '@douyinfe/semi-ui';
+import { Button, Nav, Typography } from '@douyinfe/semi-ui';
 import React from 'react';
+
+const { Text } = Typography;
 
 const HeaderMenu = () =>
     <Nav mode="horizontal" defaultSelectedKeys={['Home']}>
@@ -14,6 +16,7 @@ const HeaderMenu = () =>
             <span>文档类</span>
         </span>
         <Nav.Footer>
+            <Text link={{ href: 'https://gitee.com/code_artist/codeartist_toolkit/issues/I4JDY4' }}>想要的小工具没有？</Text>
             <Button
                 theme="borderless"
                 icon={<IconHelpCircle size="large" />}
@@ -29,6 +32,7 @@ const HeaderMenu = () =>
                     color: 'var(--semi-color-text-2)',
                     marginRight: '12px',
                 }}
+                onClick={() => window.location = 'https://gitee.com/code_artist/codeartist_toolkit'}
             />
         </Nav.Footer>
     </Nav>

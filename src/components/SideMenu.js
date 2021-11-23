@@ -16,10 +16,8 @@ const SideMenu = () => {
             {
                 itemKey: 'encode', text: '编码', icon: <IconTextRectangle size="large" />,
                 items: [
-                    { itemKey: '/base64', text: 'Base64' },
-                    { itemKey: '/', text: 'Base64' },
-                    { itemKey: 'base2', text: 'Base64' },
-                    { itemKey: 'base624', text: 'Base64' },
+                    { itemKey: '/encode/text', text: '文本类' },
+                    { itemKey: '/encode/image', text: '图形类' },
                 ]
             },
             { itemKey: 'encrypt', text: '加密', icon: <IconKey size="large" /> },

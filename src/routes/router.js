@@ -1,8 +1,9 @@
-import Base64 from "../view/develop/Base64";
+import TextEncode from "../view/develop/TextEncode";
 
 const routes = [
-    { path: "/", main: <h1>欢迎来到得方大数据低代码平台</h1> },
-    { path: "/base64", main: <Base64 /> },
+    { path: "/", main: <h1>欢迎使用码匠工具集</h1> },
+    { path: "/encode/text", main: <TextEncode /> },
+    { path: "/*", main: <h1>Todo</h1> },
 ]
 
 export default routes;
