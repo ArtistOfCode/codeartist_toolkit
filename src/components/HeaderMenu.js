@@ -1,4 +1,4 @@
-import { IconApartment, IconGithubLogo, IconHelpCircle, IconHome, IconKey, IconTextRectangle } from '@douyinfe/semi-icons';
+import { IconApartment, IconFile, IconGithubLogo, IconHelpCircle, IconHome, IconKey, IconTextRectangle } from '@douyinfe/semi-icons';
 import { Avatar, Button, Nav, Typography } from '@douyinfe/semi-ui';
 import React from 'react';
 
@@ -17,13 +17,26 @@ const menu = {
                 { itemKey: '/encode/qr', text: '二维码' },
             ]
         },
-        { itemKey: 'encrypt', text: '加密', icon: <IconKey size="large" /> },
+        {
+            itemKey: 'encrypt', text: '加密', icon: <IconKey size="large" />,
+            items: [
+                { itemKey: '/encrypt/hash', text: '摘要算法' },
+                { itemKey: '/encrypt/des', text: '对称加密' },
+                { itemKey: '/encrypt/rsa', text: '非对称加密' },
+            ]
+        },
         { itemKey: 'frontend', text: '前端', icon: <IconHome size="large" /> },
         { itemKey: 'backend', text: '后端', icon: <IconApartment size="large" /> },
     ],
     design: [],
     document: [
-        { itemKey: 'encrypt', text: 'PDF', icon: <IconKey size="large" /> },
+        {
+            itemKey: 'pdf', text: 'PDF工具集', icon: <IconFile size="large" />,
+            items: [
+                { itemKey: '/pdf/merge', text: 'PDF合并' },
+                { itemKey: '/pdf/split', text: 'PDF拆分' },
+            ]
+        },
     ]
 }
 
