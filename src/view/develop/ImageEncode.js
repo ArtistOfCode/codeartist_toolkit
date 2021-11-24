@@ -46,7 +46,7 @@ const ImageEncode = () => {
             </Row>
             <Row type='flex' align='top'>
                 <Col span={6} align='center'>
-                    <Form.Upload field='file' label='编码内容：' listType="picture" accept="image/*" uploadTrigger='custom' limit={1}>
+                    <Form.Upload field='file' label='编码内容：' action='false' listType="picture" accept="image/*" uploadTrigger='custom' limit={1}>
                         <IconPlus size="extra-large" />
                     </Form.Upload>
                 </Col>
