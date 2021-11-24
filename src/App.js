@@ -8,13 +8,15 @@ import routes from './routes/router';
 
 const { Header, Sider, Content, Footer } = Layout;
 
+const App = () => {
 
-const App = () =>
-  <Layout>
-    <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}><HeaderMenu /></Header>
+  const [menu, setMenu] = React.useState([]);
+
+  return <Layout>
+    <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}><HeaderMenu setMenu={setMenu} /></Header>
     <Layout>
       <Router>
-        <Sider style={{ position: 'fixed', paddingTop: 60, height: '100%' }}><SideMenu /></Sider>
+        <Sider style={{ position: 'fixed', paddingTop: 60, height: '100%' }}><SideMenu menu={menu} /></Sider>
         <Content style={{ marginTop: 60, marginBottom: 60, marginLeft: 220, padding: '24px', }}>
           <div style={{ padding: 10, minHeight: 300, borderRadius: '10px', border: '1px solid var(--semi-color-border)', }}>
             <Routes>
@@ -30,6 +32,7 @@ const App = () =>
         <span>Copyright © 2021 CodeArtist 码匠</span>
       </Footer>
     </Layout>
-  </Layout >
+  </Layout>;
+}
 
 export default App;
