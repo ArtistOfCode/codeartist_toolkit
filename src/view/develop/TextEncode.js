@@ -34,40 +34,42 @@ const decode = api => {
 
 const TextEncode = () => {
 
-    let api = React.useRef();
+    const { RadioGroup, TextArea } = Form;
 
     return (
-        <Form initValues={{ type: 'url' }} getFormApi={v => api = v}>
-            <Row>
-                <Form.RadioGroup field='type' span={24} label='编码方式：' type='button' buttonSize='middle' onChange={v => api.setValues({ leftData: null, rightData: null })}>
-                    <Tooltip content='URL编码' position='bottom'>
-                        <Radio value='url'>URL</Radio>
-                    </Tooltip>
-                    <Tooltip content='十六进制编码' position='bottom'>
-                        <Radio value='hex'>Hex</Radio>
-                    </Tooltip>
-                    <Tooltip content='Base64编码' position='bottom'>
-                        <Radio value='base64'>Base64</Radio>
-                    </Tooltip>
-                </Form.RadioGroup>
-            </Row>
-            <Row type='flex' align='middle'>
-                <Col span={8}>
-                    <Form.TextArea showClear rows={15} label='编码内容：' field='leftData' />
-                </Col>
-                <Col span={2} align='center'>
-                    <Space vertical>
-                        <Button icon={<IconArrowRight size='small' />} theme='solid' type='primary' size='small'
-                            onClick={() => encode(api)}>编码</Button>
-                        <Button icon={<IconArrowLeft size='small' />} theme='solid' type='primary' size='small'
-                            onClick={() => decode(api)}>解码</Button>
-                    </Space>
-                </Col>
-                <Col span={8}>
-                    <Form.TextArea showClear rows={15} label='解码内容：' field='rightData' />
-                </Col>
-            </Row>
-        </Form>
+        <Form initValues={{ type: 'url' }} render={({ formApi }) => (
+            <>
+                <Row>
+                    <RadioGroup field='type' span={24} label='编码方式：' type='button' buttonSize='middle' onChange={v => formApi.setValues({ leftData: null, rightData: null })}>
+                        <Tooltip content='URL编码' position='bottom'>
+                            <Radio value='url'>URL</Radio>
+                        </Tooltip>
+                        <Tooltip content='十六进制编码' position='bottom'>
+                            <Radio value='hex'>Hex</Radio>
+                        </Tooltip>
+                        <Tooltip content='Base64编码' position='bottom'>
+                            <Radio value='base64'>Base64</Radio>
+                        </Tooltip>
+                    </RadioGroup>
+                </Row>
+                <Row type='flex' align='middle'>
+                    <Col span={8}>
+                        <TextArea showClear rows={15} label='编码内容：' field='leftData' />
+                    </Col>
+                    <Col span={2} align='center'>
+                        <Space vertical>
+                            <Button icon={<IconArrowRight size='small' />} theme='solid' type='primary' size='small'
+                                onClick={() => encode(formApi)}>编码</Button>
+                            <Button icon={<IconArrowLeft size='small' />} theme='solid' type='primary' size='small'
+                                onClick={() => decode(formApi)}>解码</Button>
+                        </Space>
+                    </Col>
+                    <Col span={8}>
+                        <TextArea showClear rows={15} label='解码内容：' field='rightData' />
+                    </Col>
+                </Row>
+            </>
+        )} />
     )
 }
 

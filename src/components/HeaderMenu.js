@@ -1,5 +1,5 @@
-import { IconGithubLogo, IconHelpCircle, IconSemiLogo } from '@douyinfe/semi-icons';
-import { Button, Nav, Typography } from '@douyinfe/semi-ui';
+import { IconGithubLogo, IconHelpCircle } from '@douyinfe/semi-icons';
+import { Avatar, Button, Nav, Typography } from '@douyinfe/semi-ui';
 import React from 'react';
 
 const { Text } = Typography;
@@ -7,7 +7,7 @@ const { Text } = Typography;
 const HeaderMenu = () =>
     <Nav mode="horizontal" defaultSelectedKeys={['Home']}>
         <Nav.Header>
-            <IconSemiLogo style={{ width: '96px', height: '36px', fontSize: 36 }} />
+            <Avatar src="/logo.png" shape='square' size='small' style={{ marginRight: '10px' }} />
             <h3>码匠工具集</h3>
         </Nav.Header>
         <span style={{ color: 'var(--semi-color-text-0)', }}>
