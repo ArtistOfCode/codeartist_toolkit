@@ -29,6 +29,7 @@ const menu = {
             itemKey: 'frontend', text: '前端', icon: <IconHome size="large" />,
             items: [
                 { itemKey: '/color', text: '色彩' },
+                { itemKey: '/format', text: '格式化' },
             ]
         },
         { itemKey: 'backend', text: '后端', icon: <IconApartment size="large" /> },
