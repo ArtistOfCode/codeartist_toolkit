@@ -79,13 +79,13 @@ const QrEncode = () => {
                 </Row>
                 <Row type='flex' align='top'>
                     <Col span={8}>
-                        <Label style={{ paddingTop: '12px' }}>WIFI信息：</Label>
                         {values.type === 'text' && <TextArea showClear rows={15} label='编码内容：' field='leftData' />}
                         {values.type === 'url' && <TextArea showClear placeholder='请输入网站链接' rows={15}
                             validate={validator.url}
                             label='编码内容：' field='leftData' />}
                         {values.type === 'wifi' &&
                             <>
+                                <Label style={{ paddingTop: '12px' }}>WIFI信息：</Label>
                                 <Input field='S' label='SSID' labelPosition='inset' showClear style={wifiStyle}
                                     validate={v => v && v !== '' ? '' : 'SSID不能为空'}
                                 />
@@ -100,6 +100,7 @@ const QrEncode = () => {
                         }
                         {values.type === 'vcard' &&
                             <>
+                                <Label style={{ paddingTop: '12px' }}>名片信息：</Label>
                                 <Input field='N' label='姓名' labelPosition='inset' showClear style={wifiStyle} />
                                 <Input field='NICKNAME' label='昵称' labelPosition='inset' showClear style={wifiStyle} />
                                 <Input field='TEL' label='手机' labelPosition='inset' showClear style={wifiStyle} />

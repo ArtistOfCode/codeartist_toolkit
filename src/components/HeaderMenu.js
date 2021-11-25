@@ -20,9 +20,9 @@ const menu = {
         {
             itemKey: 'encrypt', text: '加密', icon: <IconKey size="large" />,
             items: [
-                { itemKey: '/encrypt/hash', text: '摘要算法' },
-                { itemKey: '/encrypt/des', text: '对称加密' },
-                { itemKey: '/encrypt/rsa', text: '非对称加密' },
+                { itemKey: '/crypt/hash', text: '摘要算法' },
+                { itemKey: '/crypt/des', text: '对称加密' },
+                { itemKey: '/crypt/rsa', text: '非对称加密' },
             ]
         },
         {
