@@ -35,7 +35,9 @@ const decrypt = (values, api) => {
     const config = { mode: CryptoJS.mode[mode], padding: CryptoJS.pad[padding] }
 
     try {
-        api.setValue('leftData', CryptoJS[type].decrypt(data, key, config).toString(CryptoJS.enc.Utf8))
+        const chiper = CryptoJS[type].decrypt(data, key, config).toString(CryptoJS.enc.Utf8);
+        if (!chiper) Toast.error('解密失败')
+        api.setValue('leftData', chiper)
     } catch (e) {
         Toast.error(e.toString())
     }
