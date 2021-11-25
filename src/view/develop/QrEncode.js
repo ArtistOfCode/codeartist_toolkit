@@ -15,12 +15,28 @@ const wifiProtecel = (values) => {
     return `WIFI:S:${S || ''};T:${T || ''};P:${T === 'nopass' ? '' : P || ''};${H ? 'H:true' : ''};`
 }
 
+const vcardProtecel = (values) => {
+    const { N, NICKNAME, TEL, EMAIL, ADR } = values;
+    let res = 'BEGIN:VCARD\nVERSION:3.0\n'
+    if (N) res += 'N:' + N + '\n'
+    if (NICKNAME) res += 'NICKNAME:' + NICKNAME + '\n'
+    if (TEL) res += 'TEL:' + TEL + '\n'
+    if (EMAIL) res += 'EMAIL:' + EMAIL + '\n'
+    if (ADR) res += 'ADR:' + ADR + '\n'
+    res += 'END:VCARD'
+    return res;
+}
+
 const encode = (state, api) => {
     const { type, leftData } = state.values;
     let data = leftData;
     if (type === 'wifi') {
         data = wifiProtecel(state.values)
         console.debug('WIFI:', data)
+    }
+    if (type === 'vcard') {
+        data = vcardProtecel(state.values)
+        console.debug('VCARD:', data)
     }
     if (!data) {
         Toast.error('编码数据不能为空')
@@ -44,6 +60,8 @@ const encode = (state, api) => {
 
 const QrEncode = () => {
 
+    const { RadioGroup, Label, Input, TextArea, Slot, Select, Switch } = Form;
+
     const initValues = { type: 'text', T: 'WPA', rightData: '' }
     const wifiStyle = { width: '300px' }
 
@@ -51,32 +69,42 @@ const QrEncode = () => {
         <Form initValues={initValues} render={({ formState, formApi, values }) => (
             <>
                 <Row>
-                    <Form.RadioGroup field='type' span={24} label='编码方式：' type='button' buttonSize='middle'
+                    <RadioGroup field='type' span={24} label='编码方式：' type='button' buttonSize='middle'
                         onChange={v => formApi.setValues({ leftData: null, rightData: null })}>
                         <Radio value='text'>文本</Radio>
                         <Radio value='url'>网址</Radio>
+                        <Radio value='vcard'>电子名片</Radio>
                         <Radio value='wifi'>WIFI</Radio>
-                    </Form.RadioGroup>
+                    </RadioGroup>
                 </Row>
                 <Row type='flex' align='top'>
                     <Col span={8}>
-                        <Form.Label style={{ paddingTop: '12px' }}>WIFI信息：</Form.Label>
-                        {values.type === 'text' && <Form.TextArea showClear rows={15} label='编码内容：' field='leftData' />}
-                        {values.type === 'url' && <Form.TextArea showClear placeholder='请输入网站链接' rows={15}
+                        <Label style={{ paddingTop: '12px' }}>WIFI信息：</Label>
+                        {values.type === 'text' && <TextArea showClear rows={15} label='编码内容：' field='leftData' />}
+                        {values.type === 'url' && <TextArea showClear placeholder='请输入网站链接' rows={15}
                             validate={validator.url}
                             label='编码内容：' field='leftData' />}
                         {values.type === 'wifi' &&
                             <>
-                                <Form.Input field='S' label='SSID' labelPosition='inset' showClear style={wifiStyle}
+                                <Input field='S' label='SSID' labelPosition='inset' showClear style={wifiStyle}
                                     validate={v => v && v !== '' ? '' : 'SSID不能为空'}
                                 />
-                                <Form.Select field='T' label='加密' labelPosition='inset' style={wifiStyle}>
-                                    <Form.Select.Option value='WPA'>WPA</Form.Select.Option>
-                                    <Form.Select.Option value='WEP'>WEP</Form.Select.Option>
-                                    <Form.Select.Option value='nopass'>NONE</Form.Select.Option>
-                                </Form.Select>
-                                {values.T !== 'nopass' && <Form.Input field='P' label='密码' labelPosition='inset' mode='password' style={wifiStyle} />}
-                                <Form.Switch field='H' label='是否隐藏SSID' style={{ marginTop: '10px' }} />
+                                <Select field='T' label='加密' labelPosition='inset' style={wifiStyle}>
+                                    <Select.Option value='WPA'>WPA</Select.Option>
+                                    <Select.Option value='WEP'>WEP</Select.Option>
+                                    <Select.Option value='nopass'>NONE</Select.Option>
+                                </Select>
+                                {values.T !== 'nopass' && <Input field='P' label='密码' labelPosition='inset' mode='password' style={wifiStyle} />}
+                                <Switch field='H' label='是否隐藏SSID' style={{ marginTop: '10px' }} />
+                            </>
+                        }
+                        {values.type === 'vcard' &&
+                            <>
+                                <Input field='N' label='姓名' labelPosition='inset' showClear style={wifiStyle} />
+                                <Input field='NICKNAME' label='昵称' labelPosition='inset' showClear style={wifiStyle} />
+                                <Input field='TEL' label='手机' labelPosition='inset' showClear style={wifiStyle} />
+                                <Input field='EMAIL' label='邮箱' labelPosition='inset' showClear style={wifiStyle} />
+                                <Input field='ADR' label='地址' labelPosition='inset' showClear style={wifiStyle} />
                             </>
                         }
                     </Col>
@@ -87,11 +115,11 @@ const QrEncode = () => {
                         </Space>
                     </Col>
                     <Col span={6} align='center'>
-                        <Form.Slot label='二维码：'>
+                        <Slot label='二维码：'>
                             <div>
                                 <img alt='' src={values.rightData} />
                             </div>
-                        </Form.Slot>
+                        </Slot>
                     </Col>
                 </Row>
             </>
