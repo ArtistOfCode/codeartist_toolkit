@@ -4,34 +4,48 @@ import React from 'react';
 import CryptoJS from 'crypto-js';
 
 const encrypt = (values, api) => {
-    const { type, mode, padding, key, leftData } = values;
+    let { type, mode, padding, key, leftData } = values;
     const data = leftData;
-    if (!data) {
-        Toast.error('编码数据不能为空')
-        return
+    if (!data) { Toast.error('加密数据不能为空'); return }
+    if (!key) { Toast.error('密钥不能为空'); return }
+
+    if (mode === 'ECB') {
+        if (key.length % 4 !== 0) { Toast.warning('密钥位数不正确'); return }
+        key = CryptoJS.enc.Utf8.parse(key)
     }
     const config = { mode: CryptoJS.mode[mode], padding: CryptoJS.pad[padding] }
-    console.debug(type, mode, padding, key, data)
-    api.setValue('rightData', CryptoJS[type].encrypt(data, key, config).toString())
+
+    try {
+        api.setValue('rightData', CryptoJS[type].encrypt(data, key, config).toString())
+    } catch (e) {
+        Toast.error(e.toString())
+    }
 }
 
 const decrypt = (values, api) => {
-    const { type, mode, padding, key, rightData } = values;
+    let { type, mode, padding, key, rightData } = values;
     const data = rightData;
-    if (!data) {
-        Toast.error('解码数据不能为空')
-        return
-    }
-    const config = { mode: CryptoJS.mode[mode], padding: CryptoJS.pad[padding], }
+    if (!data) { Toast.error('解码数据不能为空'); return }
+    if (!key) { Toast.error('密钥不能为空'); return }
 
-    api.setValue('leftData', CryptoJS[type].decrypt(data, key, config).toString(CryptoJS.enc.Utf8))
+    if (mode === 'ECB') {
+        if (key.length % 4 !== 0) { Toast.warning('密钥位数不正确'); return }
+        key = CryptoJS.enc.Utf8.parse(key)
+    }
+    const config = { mode: CryptoJS.mode[mode], padding: CryptoJS.pad[padding] }
+
+    try {
+        api.setValue('leftData', CryptoJS[type].decrypt(data, key, config).toString(CryptoJS.enc.Utf8))
+    } catch (e) {
+        Toast.error(e.toString())
+    }
 }
 
 const DesCrypt = () => {
 
     const { RadioGroup, TextArea, Input } = Form;
 
-    const initValues = { type: 'AES', mode: 'CBC', padding: 'Pkcs7' }
+    const initValues = { type: 'AES', mode: 'ECB', padding: 'Pkcs7' }
 
     return (
         <Form initValues={initValues} render={({ formApi, values }) => (
@@ -43,11 +57,11 @@ const DesCrypt = () => {
                     <Radio value='RC4'>RC4</Radio>
                 </RadioGroup>
                 <RadioGroup field='mode' span={24} label='加密模式：' type='button' buttonSize='middle'>
+                    <Radio value='ECB'>ECB</Radio>
                     <Radio value='CBC'>CBC</Radio>
                     <Radio value='CFB'>CFB</Radio>
                     <Radio value='CTR'>CTR</Radio>
                     <Radio value='OFB'>OFB</Radio>
-                    <Radio value='ECB'>ECB</Radio>
                 </RadioGroup>
                 <RadioGroup field='padding' span={24} label='填充形式：' type='button' buttonSize='middle'>
                     <Radio value='Pkcs7'>Pkcs7</Radio>
