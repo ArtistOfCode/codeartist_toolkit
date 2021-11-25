@@ -4,10 +4,7 @@ import { Button, Form, Table } from "@douyinfe/semi-ui"
 const merge = (api, values) => {
     const { fileSelect } = values;
     console.table(fileSelect)
-
-    const fd = new FileReader()
-    fd.readAsDataURL(fileSelect[0].fileInstance)
-    fd.onload = () => console.debug(fd.result)
+    // TODO PDF合并和拆分前端还不知道怎么实现
 }
 
 const columns = [
