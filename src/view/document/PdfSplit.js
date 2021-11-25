@@ -31,23 +31,23 @@ const rowSelection = (api, values) => {
     }
 }
 
-const PdfMerge = () => {
+const PdfSplit = () => {
 
     const { Upload, Label } = Form
 
     return (
         <Form initValues={{ file: [] }} render={({ formApi, values }) => (
             <>
-                <Upload field='file' noLabel multiple action='false' accept='.pdf' uploadTrigger='custom'>
+                <Upload field='file' noLabel action='false' accept='.pdf' limit={1} uploadTrigger='custom'>
                     <Button icon={<IconUpload />} theme="light">上传文件</Button>
                 </Upload>
                 <Label>文件信息：</Label>
                 <Table rowKey='uid' columns={columns} dataSource={values.file} rowSelection={rowSelection(formApi, values)} />
-                <Button onClick={() => merge(formApi, values)}>合并PDF</Button>
+                <Button onClick={() => merge(formApi, values)}>拆分PDF</Button>
                 <Button style={{ marginLeft: '20px' }} onClick={() => window.open("https://github.com/torakiki/pdfsam/releases")}>下载本地软件</Button>
             </>
         )} />
     )
 }
 
-export default PdfMerge
+export default PdfSplit
