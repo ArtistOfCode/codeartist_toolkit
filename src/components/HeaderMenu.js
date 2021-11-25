@@ -1,4 +1,4 @@
-import { IconApartment, IconFile, IconGithubLogo, IconHelpCircle, IconHome, IconKey, IconTextRectangle } from '@douyinfe/semi-icons';
+import { IconApartment, IconFile, IconGithubLogo, IconHelpCircle, IconHome, IconKey, IconTextRectangle, IconColorPalette } from '@douyinfe/semi-icons';
 import { Avatar, Button, Nav, Typography } from '@douyinfe/semi-ui';
 import React from 'react';
 
@@ -25,10 +25,17 @@ const menu = {
                 { itemKey: '/encrypt/rsa', text: '非对称加密' },
             ]
         },
-        { itemKey: 'frontend', text: '前端', icon: <IconHome size="large" /> },
+        {
+            itemKey: 'frontend', text: '前端', icon: <IconHome size="large" />,
+            items: [
+                { itemKey: '/color', text: '色彩' },
+            ]
+        },
         { itemKey: 'backend', text: '后端', icon: <IconApartment size="large" /> },
     ],
-    design: [],
+    design: [
+        { itemKey: '/color', text: '色彩', icon: <IconColorPalette size="large" /> },
+    ],
     document: [
         {
             itemKey: 'pdf', text: 'PDF工具集', icon: <IconFile size="large" />,
