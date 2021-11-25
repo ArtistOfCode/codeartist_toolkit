@@ -8,6 +8,12 @@ const ColorView = ({ color }) => (
 
 const hexHandler = (hex, api) => {
     api.setValue('hex', hex)
+    if (hex.length !== 4 && hex.length !== 7) {
+        return;
+    }
+    if (hex.length === 4) {
+        hex = hex.replace(/([\d,a-f,A-F])/g, '$1$1')
+    }
     const r = parseInt("0x" + hex.slice(1, 3));
     const g = parseInt("0x" + hex.slice(3, 5));
     const b = parseInt("0x" + hex.slice(5, 7));
@@ -53,7 +59,8 @@ const Color = () => {
                     </Col>
                     <Col span={6}>
                         <Label style={{ paddingTop: '12px' }}>颜色配置：</Label>
-                        {values.type === 'hex' && <Input field='hex' label='HEX' labelPosition='inset' style={{ width: '200px' }} />}
+                        {values.type === 'hex' &&
+                            <Input field='hex' label='HEX' labelPosition='inset' style={{ width: '200px' }} onChange={v => hexHandler(v, formApi)} />}
                         {values.type === 'rgb' && <>
                             <InputNumber field='r' label='R' labelPosition='inset' />
                             <InputNumber field='g' label='G' labelPosition='inset' />
