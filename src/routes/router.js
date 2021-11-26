@@ -1,4 +1,5 @@
 import Color from "../view/design/Color";
+import CodeFormatter from "../view/develop/CodeFormatter";
 import DesCrypt from "../view/develop/DesCrypt";
 import HashCrypt from "../view/develop/HashCrypt";
 import ImageEncode from "../view/develop/ImageEncode";
@@ -18,6 +19,7 @@ const routes = [
     { path: "/encode/qr", main: <QrEncode /> },
     { path: "/pdf/merge", main: <PdfMerge /> },
     { path: "/pdf/split", main: <PdfSplit /> },
+    { path: "/front/format", main: <CodeFormatter /> },
     { path: "/color", main: <Color /> },
     { path: "/*", main: <h1>Todo</h1> },
 ]
