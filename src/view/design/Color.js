@@ -60,11 +60,15 @@ const Color = () => {
                     <Col span={6}>
                         <Label style={{ paddingTop: '12px' }}>颜色配置：</Label>
                         {values.type === 'hex' &&
-                            <Input field='hex' label='HEX' labelPosition='inset' style={{ width: '200px' }} onChange={v => hexHandler(v, formApi)} />}
+                            <Input field='hex' label='HEX' labelPosition='inset' style={{ width: '200px' }}
+                                onChange={v => hexHandler(v, formApi)} />}
                         {values.type === 'rgb' && <>
-                            <InputNumber field='r' label='R' labelPosition='inset' onChange={v => formApi.setValue('rgb', `rgb(${v}, ${values.g}, ${values.b})`)} />
-                            <InputNumber field='g' label='G' labelPosition='inset' onChange={v => formApi.setValue('rgb', `rgb(${values.r}, ${v}, ${values.b})`)} />
-                            <InputNumber field='b' label='B' labelPosition='inset' onChange={v => formApi.setValue('rgb', `rgb(${values.r}, ${values.g}, ${v})`)} />
+                            <InputNumber field='r' label='R' labelPosition='inset' min={0} max={255}
+                                onChange={v => rgbHandler({ r: v, g: values.g, b: values.b }, formApi)} />
+                            <InputNumber field='g' label='G' labelPosition='inset' min={0} max={255}
+                                onChange={v => rgbHandler({ r: values.r, g: v, b: values.b }, formApi)} />
+                            <InputNumber field='b' label='B' labelPosition='inset' min={0} max={255}
+                                onChange={v => rgbHandler({ r: values.r, g: values.g, b: v }, formApi)} />
                             <Input field='rgb' label='RGB' labelPosition='inset' style={{ width: '250px' }} />
                         </>}
                     </Col>
