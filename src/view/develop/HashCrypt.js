@@ -1,8 +1,7 @@
 import { IconArrowRight } from '@douyinfe/semi-icons';
-import { Button, Col, Form, Radio, Row, Space, Toast } from "@douyinfe/semi-ui";
+import { Button, Col, Form, Row, Space, Toast, useFormApi, useFormState } from "@douyinfe/semi-ui";
 import CryptoJS from 'crypto-js';
 import React from 'react';
-
 
 const encrypt = (values, api) => {
     const { type, encode, leftData } = values;
@@ -14,49 +13,52 @@ const encrypt = (values, api) => {
     api.setValue('rightData', CryptoJS[type](data).toString(CryptoJS.enc[encode]))
 }
 
-const HashCrypt = () => {
+const FormField = () => {
 
-    const { RadioGroup, TextArea } = Form;
+    const { RadioGroup, Radio, TextArea } = Form;
+
+    const formApi = useFormApi()
+    const { values } = useFormState()
+
+    return <>
+        <Row>
+            <RadioGroup field='type' span={24} label='摘要算法：' type='button' buttonSize='middle'
+                onChange={v => formApi.setValues({ rightData: null, encode: 'Base64' })}>
+                <Radio value='MD5'>MD5</Radio>
+                <Radio value='SHA1'>SHA1</Radio>
+                <Radio value='SHA256'>SHA256</Radio>
+                <Radio value='SHA512'>SHA512</Radio>
+                <Radio value='SHA3'>SHA3</Radio>
+            </RadioGroup>
+        </Row>
+        <Row>
+            <RadioGroup field='encode' span={24} label='编码方式：' type='button' buttonSize='middle'>
+                <Radio value='Base64'>Base64</Radio>
+                <Radio value='Hex'>Hex</Radio>
+            </RadioGroup>
+        </Row>
+        <Row type='flex' align='top'>
+            <Col span={8}>
+                <TextArea showClear rows={15} label='信息内容：' field='leftData' />
+            </Col>
+            <Col span={2} align='center' style={{ paddingTop: '150px' }}>
+                <Space vertical>
+                    <Button icon={<IconArrowRight size='small' />} theme='solid' type='primary' size='small'
+                        onClick={() => encrypt(values, formApi)}>加密</Button>
+                </Space>
+            </Col>
+            <Col span={8} align='center'>
+                <TextArea showClear rows={15} label='摘要内容：' field='rightData' />
+            </Col>
+        </Row>
+    </>
+}
+
+const HashCrypt = () => {
 
     const initValues = { type: 'MD5', encode: 'Base64' }
 
-    return (
-        <Form initValues={initValues} render={({ formApi, values }) => (
-            <>
-                <Row>
-                    <RadioGroup field='type' span={24} label='摘要算法：' type='button' buttonSize='middle'
-                        onChange={v => formApi.setValues({ rightData: null, encode: 'Base64' })}>
-                        <Radio value='MD5'>MD5</Radio>
-                        <Radio value='SHA1'>SHA1</Radio>
-                        <Radio value='SHA256'>SHA256</Radio>
-                        <Radio value='SHA512'>SHA512</Radio>
-                        <Radio value='SHA3'>SHA3</Radio>
-                    </RadioGroup>
-                </Row>
-                <Row>
-                    <RadioGroup field='encode' span={24} label='编码方式：' type='button' buttonSize='middle'>
-                        <Radio value='Base64'>Base64</Radio>
-                        <Radio value='Hex'>Hex</Radio>
-                    </RadioGroup>
-                </Row>
-                <Row type='flex' align='top'>
-                    <Col span={8}>
-                        <TextArea showClear rows={15} label='信息内容：' field='leftData' />
-                    </Col>
-                    <Col span={2} align='center' style={{ paddingTop: '150px' }}>
-                        <Space vertical>
-                            <Button icon={<IconArrowRight size='small' />} theme='solid' type='primary' size='small'
-                                onClick={() => encrypt(values, formApi)}>加密</Button>
-                        </Space>
-                    </Col>
-                    <Col span={8} align='center'>
-                        <TextArea showClear rows={15} label='摘要内容：' field='rightData' />
-                    </Col>
-                </Row>
-            </>
-        )}>
-        </Form>
-    )
+    return <Form initValues={initValues}><FormField /></Form>
 }
 
 export default HashCrypt;

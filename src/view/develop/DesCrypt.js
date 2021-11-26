@@ -1,7 +1,7 @@
 import { IconArrowLeft, IconArrowRight } from '@douyinfe/semi-icons';
-import { Button, Col, Form, Radio, Row, Space, Toast } from "@douyinfe/semi-ui";
-import React from 'react';
+import { Button, Col, Form, Radio, Row, Space, Toast, useFormApi, useFormState } from "@douyinfe/semi-ui";
 import CryptoJS from 'crypto-js';
+import React from 'react';
 
 const encrypt = (values, api) => {
     let { type, mode, padding, key, leftData } = values;
@@ -43,59 +43,62 @@ const decrypt = (values, api) => {
     }
 }
 
-const DesCrypt = () => {
+const FormField = () => {
 
     const { RadioGroup, TextArea, Input } = Form;
 
+    const formApi = useFormApi()
+    const { values } = useFormState()
+
+    return <>
+        <RadioGroup field='type' span={24} label='加密算法：' type='button' buttonSize='middle'>
+            <Radio value='AES'>AES</Radio>
+            <Radio value='DES'>DES</Radio>
+            <Radio value='TripleDES'>TripleDES</Radio>
+            <Radio value='RC4'>RC4</Radio>
+        </RadioGroup>
+        <RadioGroup field='mode' span={24} label='加密模式：' type='button' buttonSize='middle'>
+            <Radio value='ECB'>ECB</Radio>
+            <Radio value='CBC'>CBC</Radio>
+            <Radio value='CFB'>CFB</Radio>
+            <Radio value='CTR'>CTR</Radio>
+            <Radio value='OFB'>OFB</Radio>
+        </RadioGroup>
+        <RadioGroup field='padding' span={24} label='填充形式：' type='button' buttonSize='middle'>
+            <Radio value='Pkcs7'>Pkcs7</Radio>
+            <Radio value='Iso97971'>Iso97971</Radio>
+            <Radio value='AnsiX923'>AnsiX923</Radio>
+            <Radio value='Iso10126'>Iso10126</Radio>
+            <Radio value='ZeroPadding'>ZeroPadding</Radio>
+            <Radio value='NoPadding'>NoPadding</Radio>
+        </RadioGroup>
+        <Row span={8} style={{ width: '30%' }}>
+            <Input field='key' label='密钥：' showClear />
+        </Row>
+        <Row type='flex' align='top'>
+            <Col span={8}>
+                <TextArea showClear rows={15} label='加密内容：' field='leftData' />
+            </Col>
+            <Col span={2} align='center' style={{ paddingTop: '150px' }}>
+                <Space vertical>
+                    <Button icon={<IconArrowRight size='small' />} theme='solid' type='primary' size='small'
+                        onClick={() => encrypt(values, formApi)}>加密</Button>
+                    <Button icon={<IconArrowLeft size='small' />} theme='solid' type='primary' size='small'
+                        onClick={() => decrypt(values, formApi)}>解码</Button>
+                </Space>
+            </Col>
+            <Col span={8} align='center'>
+                <TextArea showClear rows={15} label='解密内容：' field='rightData' />
+            </Col>
+        </Row>
+    </>
+}
+
+const DesCrypt = () => {
+
     const initValues = { type: 'AES', mode: 'ECB', padding: 'Pkcs7' }
 
-    return (
-        <Form initValues={initValues} render={({ formApi, values }) => (
-            <>
-                <RadioGroup field='type' span={24} label='加密算法：' type='button' buttonSize='middle'>
-                    <Radio value='AES'>AES</Radio>
-                    <Radio value='DES'>DES</Radio>
-                    <Radio value='TripleDES'>TripleDES</Radio>
-                    <Radio value='RC4'>RC4</Radio>
-                </RadioGroup>
-                <RadioGroup field='mode' span={24} label='加密模式：' type='button' buttonSize='middle'>
-                    <Radio value='ECB'>ECB</Radio>
-                    <Radio value='CBC'>CBC</Radio>
-                    <Radio value='CFB'>CFB</Radio>
-                    <Radio value='CTR'>CTR</Radio>
-                    <Radio value='OFB'>OFB</Radio>
-                </RadioGroup>
-                <RadioGroup field='padding' span={24} label='填充形式：' type='button' buttonSize='middle'>
-                    <Radio value='Pkcs7'>Pkcs7</Radio>
-                    <Radio value='Iso97971'>Iso97971</Radio>
-                    <Radio value='AnsiX923'>AnsiX923</Radio>
-                    <Radio value='Iso10126'>Iso10126</Radio>
-                    <Radio value='ZeroPadding'>ZeroPadding</Radio>
-                    <Radio value='NoPadding'>NoPadding</Radio>
-                </RadioGroup>
-                <Row span={8} style={{ width: '30%' }}>
-                    <Input field='key' label='密钥：' showClear />
-                </Row>
-                <Row type='flex' align='top'>
-                    <Col span={8}>
-                        <TextArea showClear rows={15} label='加密内容：' field='leftData' />
-                    </Col>
-                    <Col span={2} align='center' style={{ paddingTop: '150px' }}>
-                        <Space vertical>
-                            <Button icon={<IconArrowRight size='small' />} theme='solid' type='primary' size='small'
-                                onClick={() => encrypt(values, formApi)}>加密</Button>
-                            <Button icon={<IconArrowLeft size='small' />} theme='solid' type='primary' size='small'
-                                onClick={() => decrypt(values, formApi)}>解码</Button>
-                        </Space>
-                    </Col>
-                    <Col span={8} align='center'>
-                        <TextArea showClear rows={15} label='解密内容：' field='rightData' />
-                    </Col>
-                </Row>
-            </>
-        )}>
-        </Form>
-    )
+    return <Form initValues={initValues}><FormField /></Form>
 }
 
 export default DesCrypt;
