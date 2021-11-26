@@ -62,9 +62,9 @@ const Color = () => {
                         {values.type === 'hex' &&
                             <Input field='hex' label='HEX' labelPosition='inset' style={{ width: '200px' }} onChange={v => hexHandler(v, formApi)} />}
                         {values.type === 'rgb' && <>
-                            <InputNumber field='r' label='R' labelPosition='inset' />
-                            <InputNumber field='g' label='G' labelPosition='inset' />
-                            <InputNumber field='b' label='B' labelPosition='inset' />
+                            <InputNumber field='r' label='R' labelPosition='inset' onChange={v => formApi.setValue('rgb', `rgb(${v}, ${values.g}, ${values.b})`)} />
+                            <InputNumber field='g' label='G' labelPosition='inset' onChange={v => formApi.setValue('rgb', `rgb(${values.r}, ${v}, ${values.b})`)} />
+                            <InputNumber field='b' label='B' labelPosition='inset' onChange={v => formApi.setValue('rgb', `rgb(${values.r}, ${values.g}, ${v})`)} />
                             <Input field='rgb' label='RGB' labelPosition='inset' style={{ width: '250px' }} />
                         </>}
                     </Col>
