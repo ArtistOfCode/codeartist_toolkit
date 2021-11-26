@@ -4,6 +4,10 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 
+require('codemirror/mode/css/css');
+require('codemirror/mode/xml/xml');
+require('codemirror/mode/javascript/javascript');
+
 const mime = {
     json: 'application/json',
     js: 'text/javascript',
