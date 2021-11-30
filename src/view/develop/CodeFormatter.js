@@ -21,15 +21,9 @@ const errorHandler = callback => { try { return callback() } catch (e) { return 
 const operate = {
     format: {
         json: value => errorHandler(() => JSON.stringify(JSON.parse(value), null, '  ')),
-        js: value => '功能开发中',
-        html: value => '功能开发中',
-        css: value => '功能开发中',
     },
     simplify: {
         json: value => errorHandler(() => JSON.stringify(JSON.parse(value))),
-        js: value => '功能开发中',
-        html: value => '功能开发中',
-        css: value => '功能开发中',
     }
 }
 
@@ -63,9 +57,6 @@ const FormField = () => {
     return <>
         <RadioGroup field='type' span={24} label='编程语言：' type='button' buttonSize='middle'>
             <Radio value='json'>JSON</Radio>
-            <Radio value='js'>JavaScript</Radio>
-            <Radio value='html'>HTML</Radio>
-            <Radio value='css'>CSS</Radio>
         </RadioGroup>
         <Row>
             <Col span={10}>
