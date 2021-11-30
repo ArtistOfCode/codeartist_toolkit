@@ -3,6 +3,7 @@ import { Button, Col, Form, Progress, Row, Space, Typography, useFormApi, useFor
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import { Controlled as CodeMirror } from 'react-codemirror2';
+import { MathUtil } from '../../util/Utils';
 
 require('codemirror/mode/css/css');
 require('codemirror/mode/xml/xml');
@@ -15,23 +16,20 @@ const mime = {
     css: 'text/css',
 }
 
-const percent = (num, total) => {
-    num = parseFloat(num);
-    total = parseFloat(total);
-    if (isNaN(num) || isNaN(total)) {
-        return 0;
-    }
-    return total <= 0 ? 0 : (Math.round(num / total * 10000) / 100.00);
-}
-
 const errorHandler = callback => { try { return callback() } catch (e) { return e.toString() } }
 
 const operate = {
     format: {
-        json: value => errorHandler(() => JSON.stringify(JSON.parse(value), null, '  '))
+        json: value => errorHandler(() => JSON.stringify(JSON.parse(value), null, '  ')),
+        js: value => '功能开发中',
+        html: value => '功能开发中',
+        css: value => '功能开发中',
     },
     simplify: {
-        json: value => errorHandler(() => JSON.stringify(JSON.parse(value)))
+        json: value => errorHandler(() => JSON.stringify(JSON.parse(value))),
+        js: value => '功能开发中',
+        html: value => '功能开发中',
+        css: value => '功能开发中',
     }
 }
 
@@ -51,7 +49,7 @@ const simplify = (values, api) => {
     api.setValue('rightData', rightData)
     api.setValue('leftSize', data.length)
     api.setValue('rightSize', rightData.length)
-    api.setValue('percent', percent(data.length - rightData.length, data.length))
+    api.setValue('percent', MathUtil.percent(data.length - rightData.length, data.length))
 }
 
 const FormField = () => {
