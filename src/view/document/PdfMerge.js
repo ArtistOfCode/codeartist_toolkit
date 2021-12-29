@@ -1,10 +1,15 @@
 import { IconUpload } from "@douyinfe/semi-icons";
 import { Button, Form, Table, Toast } from "@douyinfe/semi-ui";
 
-const merge = (api, values) => {
+
+const merge = async (api, values) => {
     const { fileSelect } = values;
     console.table(fileSelect)
     // TODO PDF合并和拆分前端还不知道怎么实现
+    // let [fileHandle, file] = await FileUtil.read()
+    // const contents = await file.text();
+    // console.info(contents)
+    // FileUtil.write(fileHandle, '1234567')
     Toast.warning('网页版暂未实现，请下载本地软件')
 }
 
