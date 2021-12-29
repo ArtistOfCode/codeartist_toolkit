@@ -1,5 +1,5 @@
 import { IconArrowLeft, IconArrowRight } from '@douyinfe/semi-icons';
-import { Button, Col, Form, Row, Space, Toast, Tooltip, useFormApi } from "@douyinfe/semi-ui";
+import { Button, Col, Form, Row, Space, Toast, useFormApi } from "@douyinfe/semi-ui";
 import React from 'react';
 
 const operate = {
@@ -40,16 +40,11 @@ const FormField = () => {
 
     return <>
         <Row>
-            <RadioGroup field='type' span={24} label='编码方式：' type='button' buttonSize='middle' onChange={v => formApi.setValues({ leftData: null, rightData: null })}>
-                <Tooltip content='URL编码' position='bottom'>
-                    <Radio value='url'>URL</Radio>
-                </Tooltip>
-                <Tooltip content='十六进制编码' position='bottom'>
-                    <Radio value='hex'>Hex</Radio>
-                </Tooltip>
-                <Tooltip content='Base64编码' position='bottom'>
-                    <Radio value='base64'>Base64</Radio>
-                </Tooltip>
+            <RadioGroup field='type' span={24} label='编码方式：' type='button' buttonSize='middle'
+                onChange={v => formApi.setValue('rightData', null)}>
+                <Radio value='url'>URL</Radio>
+                <Radio value='hex'>Hex</Radio>
+                <Radio value='base64'>Base64</Radio>
             </RadioGroup>
         </Row>
         <Row type='flex' align='middle'>

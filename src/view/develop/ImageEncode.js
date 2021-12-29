@@ -1,5 +1,5 @@
 import { IconArrowLeft, IconArrowRight, IconPlus } from '@douyinfe/semi-icons';
-import { Button, Col, Form, Row, Space, Toast, Tooltip, useFormApi } from "@douyinfe/semi-ui";
+import { Button, Col, Form, Row, Space, Toast, useFormApi, useFormState } from "@douyinfe/semi-ui";
 import React from 'react';
 
 const encode = api => {
@@ -35,14 +35,13 @@ const FormField = () => {
     const { RadioGroup, Radio, Upload, TextArea } = Form;
 
     const formApi = useFormApi()
+    const { values } = useFormState()
 
     return <>
         <Row>
             <RadioGroup field='type' span={24} label='编码方式：' type='button' buttonSize='middle'
-                onChange={v => formApi.setValues({ leftData: null, rightData: null })}>
-                <Tooltip content='Base64编码' position='bottom'>
-                    <Radio value='base64'>Base64</Radio>
-                </Tooltip>
+                onChange={v => formApi.setValue('rightData', null)}>
+                <Radio value='base64'>Base64</Radio>
             </RadioGroup>
         </Row>
         <Row type='flex' align='top'>
@@ -50,6 +49,7 @@ const FormField = () => {
                 <Upload field='file' label='编码内容：' action='false' listType="picture" accept="image/*" uploadTrigger='custom' limit={1}>
                     <IconPlus size="extra-large" />
                 </Upload>
+                {values.file && values.file[0] && <img style={{ width: '200px' }} alt='' src={values.file[0].url} />}
             </Col>
             <Col span={2} align='center' style={{ paddingTop: '150px' }}>
                 <Space vertical>

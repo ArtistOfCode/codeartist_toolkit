@@ -51,20 +51,23 @@ const FormField = () => {
     const { values } = useFormState()
 
     return <>
-        <RadioGroup field='type' span={24} label='加密算法：' type='button' buttonSize='middle'>
+        <RadioGroup field='type' span={24} label='加密算法：' type='button' buttonSize='middle'
+            onChange={v => { formApi.setValue('rightData', null); }}>
             <Radio value='AES'>AES</Radio>
             <Radio value='DES'>DES</Radio>
             <Radio value='TripleDES'>TripleDES</Radio>
             <Radio value='RC4'>RC4</Radio>
         </RadioGroup>
-        <RadioGroup field='mode' span={24} label='加密模式：' type='button' buttonSize='middle'>
+        <RadioGroup field='mode' span={24} label='加密模式：' type='button' buttonSize='middle'
+            onChange={v => { formApi.setValue('rightData', null); }}>
             <Radio value='ECB'>ECB</Radio>
             <Radio value='CBC'>CBC</Radio>
             <Radio value='CFB'>CFB</Radio>
             <Radio value='CTR'>CTR</Radio>
             <Radio value='OFB'>OFB</Radio>
         </RadioGroup>
-        <RadioGroup field='padding' span={24} label='填充形式：' type='button' buttonSize='middle'>
+        <RadioGroup field='padding' span={24} label='填充形式：' type='button' buttonSize='middle'
+            onChange={v => { formApi.setValue('rightData', null); }}>
             <Radio value='Pkcs7'>Pkcs7</Radio>
             <Radio value='Iso97971'>Iso97971</Radio>
             <Radio value='AnsiX923'>AnsiX923</Radio>

@@ -23,7 +23,7 @@ const FormField = () => {
     return <>
         <Row>
             <RadioGroup field='type' span={24} label='摘要算法：' type='button' buttonSize='middle'
-                onChange={v => formApi.setValues({ rightData: null, encode: 'Base64' })}>
+                onChange={v => { formApi.setValue('rightData', null); }}>
                 <Radio value='MD5'>MD5</Radio>
                 <Radio value='SHA1'>SHA1</Radio>
                 <Radio value='SHA256'>SHA256</Radio>
@@ -32,7 +32,8 @@ const FormField = () => {
             </RadioGroup>
         </Row>
         <Row>
-            <RadioGroup field='encode' span={24} label='编码方式：' type='button' buttonSize='middle'>
+            <RadioGroup field='encode' span={24} label='编码方式：' type='button' buttonSize='middle'
+                onChange={v => { formApi.setValue('rightData', null); }}>
                 <Radio value='Base64'>Base64</Radio>
                 <Radio value='Hex'>Hex</Radio>
             </RadioGroup>

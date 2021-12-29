@@ -61,7 +61,7 @@ const encode = (state, api) => {
 const FormField = () => {
 
     const { RadioGroup, Radio, Label, Input, TextArea, Slot, Select, Switch } = Form;
-    const wifiStyle = { width: '300px' }
+    const inputStyle = { width: '300px' }
 
     const formApi = useFormApi()
     const formState = useFormState()
@@ -86,26 +86,26 @@ const FormField = () => {
                 {values.type === 'wifi' &&
                     <>
                         <Label style={{ paddingTop: '12px' }}>WIFI信息：</Label>
-                        <Input field='S' label='SSID' labelPosition='inset' showClear style={wifiStyle}
+                        <Input field='S' label='SSID' labelPosition='inset' showClear style={inputStyle}
                             validate={v => v && v !== '' ? '' : 'SSID不能为空'}
                         />
-                        <Select field='T' label='加密' labelPosition='inset' style={wifiStyle}>
+                        <Select field='T' label='加密' labelPosition='inset' style={inputStyle}>
                             <Select.Option value='WPA'>WPA</Select.Option>
                             <Select.Option value='WEP'>WEP</Select.Option>
                             <Select.Option value='nopass'>NONE</Select.Option>
                         </Select>
-                        {values.T !== 'nopass' && <Input field='P' label='密码' labelPosition='inset' mode='password' style={wifiStyle} />}
+                        {values.T !== 'nopass' && <Input field='P' label='密码' labelPosition='inset' mode='password' style={inputStyle} />}
                         <Switch field='H' label='是否隐藏SSID' style={{ marginTop: '10px' }} />
                     </>
                 }
                 {values.type === 'vcard' &&
                     <>
                         <Label style={{ paddingTop: '12px' }}>名片信息：</Label>
-                        <Input field='N' label='姓名' labelPosition='inset' showClear style={wifiStyle} />
-                        <Input field='NICKNAME' label='昵称' labelPosition='inset' showClear style={wifiStyle} />
-                        <Input field='TEL' label='手机' labelPosition='inset' showClear style={wifiStyle} />
-                        <Input field='EMAIL' label='邮箱' labelPosition='inset' showClear style={wifiStyle} />
-                        <Input field='ADR' label='地址' labelPosition='inset' showClear style={wifiStyle} />
+                        <Input field='N' label='姓名' labelPosition='inset' showClear style={inputStyle} />
+                        <Input field='NICKNAME' label='昵称' labelPosition='inset' showClear style={inputStyle} />
+                        <Input field='TEL' label='手机' labelPosition='inset' showClear style={inputStyle} />
+                        <Input field='EMAIL' label='邮箱' labelPosition='inset' showClear style={inputStyle} />
+                        <Input field='ADR' label='地址' labelPosition='inset' showClear style={inputStyle} />
                     </>
                 }
             </Col>

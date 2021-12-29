@@ -15,7 +15,7 @@ const FormField = () => {
     return <>
         <Row>
             <RadioGroup field='type' span={24} label='加密算法：' type='button' buttonSize='middle'
-                onChange={v => formApi.setValues({ leftData: null, rightData: null })}>
+                onChange={v => { formApi.setValue('rightData', null); }}>
                 <Radio value='md5'>MD5</Radio>
                 <Radio value='hash'>SHA</Radio>
             </RadioGroup>
