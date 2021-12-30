@@ -1,4 +1,4 @@
-import { IconApartment, IconFile, IconGithubLogo, IconHelpCircle, IconHome, IconKey, IconTextRectangle, IconColorPalette } from '@douyinfe/semi-icons';
+import { IconApartment, IconColorPalette, IconFile, IconGithubLogo, IconHelpCircle, IconHome, IconKey, IconTextRectangle } from '@douyinfe/semi-icons';
 import { Avatar, Button, Nav, Typography } from '@douyinfe/semi-ui';
 import React from 'react';
 
