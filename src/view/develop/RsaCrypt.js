@@ -6,11 +6,11 @@ import { FileUtil } from '../../util/Utils';
 
 
 const generateKey = (values, api) => {
-    const { keyBit } = values;
+    const { keyType, keyBit } = values;
     const key = new NodeRSA({ b: keyBit });
 
-    api.setValue('privateKey', key.exportKey('private'));
-    api.setValue('publicKey', key.exportKey('public'));
+    api.setValue('privateKey', key.exportKey(keyType + '-private'));
+    api.setValue('publicKey', key.exportKey(keyType + '-public'));
 }
 
 const importKey = (privateKey, values, api) => {
@@ -26,27 +26,37 @@ const importKey = (privateKey, values, api) => {
 }
 
 const encrypt = (values, api) => {
-    const { publicKey, leftData } = values;
+    const { keyType, publicKey, leftData } = values;
     if (!publicKey) { Toast.error('公钥不能为空'); return }
     if (!leftData) { Toast.error('加密数据不能为空'); return }
 
-    const key = new NodeRSA();
-    key.importKey(publicKey, 'public');
+    try {
+        const key = new NodeRSA();
+        key.importKey(publicKey, keyType + '-public');
 
-    const data = key.encrypt(leftData, 'base64');
-    api.setValue('rightData', data);
+        const data = key.encrypt(leftData, 'base64');
+        api.setValue('rightData', data);
+    } catch (error) {
+        console.error(error);
+        Toast.error('加密异常');
+    }
 }
 
 const decrypt = (values, api) => {
-    const { privateKey, rightData } = values;
+    const { keyType, privateKey, rightData } = values;
     if (!privateKey) { Toast.error('公钥不能为空'); return }
     if (!rightData) { Toast.error('加密数据不能为空'); return }
 
-    const key = new NodeRSA();
-    key.importKey(privateKey, 'private');
+    try {
+        const key = new NodeRSA();
+        key.importKey(privateKey, keyType + '-private');
 
-    const data = key.decrypt(rightData, 'utf8');
-    api.setValue('leftData', data);
+        const data = key.decrypt(rightData, 'utf8');
+        api.setValue('leftData', data);
+    } catch (error) {
+        console.error(error);
+        Toast.error('解密异常');
+    }
 }
 
 const FormField = () => {
@@ -64,8 +74,16 @@ const FormField = () => {
             </RadioGroup>
         </Row>
         <Row>
+            <RadioGroup field='keyType' span={24} label='密钥类型：' type='button' buttonSize='middle'
+                onChange={v => { formApi.setValues({ type: 'rsa', keyType: 'pkcs1', keyBit: '512' }); }}>
+                <Radio value='pkcs1'>pkcs1</Radio>
+                <Radio value='pkcs8'>pkcs8</Radio>
+                <Radio value='openssh'>openssh</Radio>
+            </RadioGroup>
+        </Row>
+        <Row>
             <RadioGroup field='keyBit' span={24} label='密钥位数：' type='button' buttonSize='middle'
-                onChange={v => { formApi.setValues({ 'type': 'rsa' }); }}>
+                onChange={v => { formApi.setValues({ type: 'rsa', keyType: 'pkcs1' }); }}>
                 <Radio value='512'>512</Radio>
                 <Radio value='1024'>1024</Radio>
                 <Radio value='2048'>2048</Radio>
@@ -75,9 +93,9 @@ const FormField = () => {
         </Row>
         <Row type='flex' align='top'>
             <Col span={8}>
-                <TextArea showClear rows={8} label='私钥：' field='privateKey' />
+                <TextArea showClear rows={5} label='私钥：' field='privateKey' />
             </Col>
-            <Col span={2} align='center' style={{ paddingTop: '80px' }}>
+            <Col span={2} align='center' style={{ paddingTop: '50px' }}>
                 <Space vertical>
                     <Button theme='solid' type='primary' size='small'
                         onClick={() => generateKey(values, formApi)}>生成</Button>
@@ -88,7 +106,7 @@ const FormField = () => {
                 </Space>
             </Col>
             <Col span={8} align='center'>
-                <TextArea showClear rows={8} label='公钥：' field='publicKey' />
+                <TextArea showClear rows={5} label='公钥：' field='publicKey' />
             </Col>
         </Row>
         <Row type='flex' align='top'>
@@ -112,7 +130,7 @@ const FormField = () => {
 
 const RsaCrypt = () => {
 
-    const initValues = { type: 'rsa', keyBit: '512' }
+    const initValues = { type: 'rsa', keyType: 'pkcs1', keyBit: '512' }
 
     return <Form initValues={initValues}><FormField /></Form>;
 }
