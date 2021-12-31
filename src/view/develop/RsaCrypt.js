@@ -44,8 +44,8 @@ const encrypt = (values, api) => {
 
 const decrypt = (values, api) => {
     const { keyType, privateKey, rightData } = values;
-    if (!privateKey) { Toast.error('公钥不能为空'); return }
-    if (!rightData) { Toast.error('加密数据不能为空'); return }
+    if (!privateKey) { Toast.error('私钥不能为空'); return }
+    if (!rightData) { Toast.error('解密数据不能为空'); return }
 
     try {
         const key = new NodeRSA();
