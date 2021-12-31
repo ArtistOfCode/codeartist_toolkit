@@ -1,5 +1,5 @@
 import { IconArrowRight } from "@douyinfe/semi-icons";
-import { Button, Col, Form, Progress, Row, Space, Typography, useFormApi, useFormState } from "@douyinfe/semi-ui";
+import { Button, Col, Form, Progress, Row, Space, Toast, Typography, useFormApi, useFormState } from "@douyinfe/semi-ui";
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import { Controlled as CodeMirror } from 'react-codemirror2';
@@ -29,14 +29,15 @@ const operate = {
 
 const format = (values, api) => {
     const { type, leftData } = values
-    const data = leftData
+    if (!leftData) { Toast.error('代码不能为空'); return }
 
-    api.setValue('rightData', operate.format[type](data))
+    api.setValue('rightData', operate.format[type](leftData))
 }
 
 const simplify = (values, api) => {
 
     const { type, leftData } = values
+    if (!leftData) { Toast.error('代码不能为空'); return }
     const data = leftData
 
     const rightData = operate.simplify[type](data);

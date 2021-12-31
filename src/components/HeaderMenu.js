@@ -1,4 +1,4 @@
-import { IconApartment, IconColorPalette, IconFile, IconGithubLogo, IconHelpCircle, IconHome, IconKey, IconTextRectangle } from '@douyinfe/semi-icons';
+import { IconApartment, IconColorPalette, IconFile, IconGithubLogo, IconHelpCircle, IconHome, IconKey, IconBriefcase } from '@douyinfe/semi-icons';
 import { Avatar, Button, Nav, Typography } from '@douyinfe/semi-ui';
 import React from 'react';
 
@@ -10,36 +10,32 @@ const menu = {
     ],
     develop: [
         {
-            itemKey: 'encode', text: '编码', icon: <IconTextRectangle size="large" />,
+            itemKey: 'encode', text: '编码加密', icon: <IconKey size="large" />,
             items: [
-                { itemKey: '/encode/text', text: '文本类' },
-                { itemKey: '/encode/image', text: '图形类' },
-                { itemKey: '/encode/qr', text: '二维码' },
+                { itemKey: '/encode/text', text: '编码 - 文本类' },
+                { itemKey: '/encode/image', text: '编码 - 图形类' },
+                { itemKey: '/encode/qr', text: '编码 - 二维码' },
+                { itemKey: '/crypt/hash', text: '加密 - 摘要算法' },
+                { itemKey: '/crypt/des', text: '加密 - 对称加密' },
+                { itemKey: '/crypt/rsa', text: '加密 - 非对称加密' },
             ]
         },
+        { itemKey: 'develop', text: '开发工具', icon: <IconBriefcase size="large" /> },
         {
-            itemKey: 'encrypt', text: '加密', icon: <IconKey size="large" />,
-            items: [
-                { itemKey: '/crypt/hash', text: '摘要算法' },
-                { itemKey: '/crypt/des', text: '对称加密' },
-                { itemKey: '/crypt/rsa', text: '非对称加密' },
-            ]
-        },
-        {
-            itemKey: 'frontend', text: '前端', icon: <IconHome size="large" />,
+            itemKey: 'frontend', text: '前端工具', icon: <IconHome size="large" />,
             items: [
                 { itemKey: '/color', text: '色彩' },
                 { itemKey: '/front/format', text: '格式化' },
             ]
         },
-        { itemKey: 'backend', text: '后端', icon: <IconApartment size="large" /> },
+        { itemKey: 'backend', text: '后端工具', icon: <IconApartment size="large" /> },
     ],
     design: [
         { itemKey: '/color', text: '色彩', icon: <IconColorPalette size="large" /> },
     ],
     document: [
         {
-            itemKey: 'pdf', text: 'PDF工具集', icon: <IconFile size="large" />,
+            itemKey: 'pdf', text: 'PDF工具', icon: <IconFile size="large" />,
             items: [
                 { itemKey: '/pdf/merge', text: 'PDF合并' },
                 { itemKey: '/pdf/split', text: 'PDF拆分' },
