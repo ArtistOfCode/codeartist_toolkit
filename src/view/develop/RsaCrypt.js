@@ -75,7 +75,10 @@ const FormField = () => {
         </Row>
         <Row>
             <RadioGroup field='keyType' span={24} label='密钥类型：' type='button' buttonSize='middle'
-                onChange={v => { formApi.setValues({ type: 'rsa', keyType: 'pkcs1', keyBit: '512' }); }}>
+                onChange={v => {
+                    formApi.setValue('privateKey', null);
+                    formApi.setValue('publicKey', null);
+                }}>
                 <Radio value='pkcs1'>pkcs1</Radio>
                 <Radio value='pkcs8'>pkcs8</Radio>
                 <Radio value='openssh'>openssh</Radio>
@@ -83,7 +86,10 @@ const FormField = () => {
         </Row>
         <Row>
             <RadioGroup field='keyBit' span={24} label='密钥位数：' type='button' buttonSize='middle'
-                onChange={v => { formApi.setValues({ type: 'rsa', keyType: 'pkcs1' }); }}>
+                onChange={v => {
+                    formApi.setValue('privateKey', null);
+                    formApi.setValue('publicKey', null);
+                }}>
                 <Radio value='512'>512</Radio>
                 <Radio value='1024'>1024</Radio>
                 <Radio value='2048'>2048</Radio>
