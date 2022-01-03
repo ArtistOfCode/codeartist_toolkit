@@ -1,6 +1,7 @@
 import { IconApartment, IconColorPalette, IconFile, IconGithubLogo, IconHelpCircle, IconHome, IconKey, IconBriefcase } from '@douyinfe/semi-icons';
-import { Avatar, Button, Nav, Typography } from '@douyinfe/semi-ui';
+import { Avatar, Button, Nav, Toast, Typography } from '@douyinfe/semi-ui';
 import React from 'react';
+import websocket from '../api/websocket';
 
 const menu = {
     header: [
@@ -49,10 +50,26 @@ const menu = {
     ]
 }
 
+const connection = (setServer) => {
+    websocket.connection('ws://localhost:8888/ws')
+        .then(() => {
+            setServer(true)
+            Toast.success("连接本地服务器成功")
+        })
+        .then(() => {
+            websocket.ws.onclose = () => {
+                setServer(false)
+                Toast.warning("本地服务器已断开")
+            };
+        })
+        .catch(() => Toast.error("连接本地服务器失败"))
+}
+
 const HeaderMenu = ({ setMenu }) => {
 
     const { Text } = Typography;
 
+    const [server, setServer] = React.useState(false);
     const [selectKey, setSelectKey] = React.useState(['develop']);
 
     React.useEffect(() => setMenu(menu[selectKey[0]]), [setMenu, selectKey])
@@ -70,6 +87,9 @@ const HeaderMenu = ({ setMenu }) => {
             <Button theme="borderless" icon={<IconGithubLogo size="large" />}
                 style={{ color: 'var(--semi-color-text-2)', marginRight: '12px', }}
                 onClick={() => window.location = 'https://gitee.com/code_artist/codeartist_toolkit'} />
+            <Button theme='solid' type={server ? 'primary' : 'danger'} onClick={() => { if (!server) connection(setServer) }}>
+                {server ? '已连接' : '未连接'}
+            </Button>
         </Nav.Footer>
     </Nav>;
 }
