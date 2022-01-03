@@ -14,9 +14,11 @@ const connection = (setConnect, setVisible, setDatabase, setTable, formApi, data
             return mysql.query('show databases')
         })
         .then(result => {
-            formApi.setValue('database', values.database)
+            if (values.database) {
+                formApi.setValue('database', values.database)
+                selectDatabse(values.database, setTable)
+            }
             setDatabase(result.map(e => e.Database))
-            selectDatabse(values.database, setTable)
             Toast.success('数据库连接成功')
         })
         .catch(error => Toast.error(error));
@@ -88,11 +90,11 @@ const FormField = ({ setTable }) => {
             onCancel={() => setVisible(false)}
         >
             <Form getFormApi={setDatabaseFormApi} labelPosition="left" labelAlign="right" labelWidth={100} initValues={initValues}>
-                <Form.Input field="host" label="服务器地址" style={{ width: 200 }} />
-                <Form.InputNumber field='port' label='端口' style={{ width: 200 }} />
-                <Form.Input field="user" label="用户名" style={{ width: 200 }} />
-                <Form.Input field="password" mode="password" label="密码" style={{ width: 200 }} />
-                <Form.Input field="database" label="数据库" style={{ width: 200 }} />
+                <Form.Input field="host" label="服务器地址" style={{ width: 280 }} />
+                <Form.InputNumber field='port' label='端口' style={{ width: 280 }} />
+                <Form.Input field="user" label="用户名" style={{ width: 280 }} />
+                <Form.Input field="password" mode="password" label="密码" style={{ width: 280 }} />
+                <Form.Input field="database" label="数据库" style={{ width: 280 }} />
             </Form>
         </Modal>
     </>
