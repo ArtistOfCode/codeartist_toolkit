@@ -20,7 +20,12 @@ const menu = {
                 { itemKey: '/crypt/rsa', text: '加密 - 非对称加密' },
             ]
         },
-        { itemKey: 'develop', text: '开发工具', icon: <IconBriefcase size="large" /> },
+        {
+            itemKey: 'develop', text: '开发工具', icon: <IconBriefcase size="large" />,
+            items: [
+                { itemKey: '/develop/mysql', text: 'MySQL客户端' }
+            ]
+        },
         {
             itemKey: 'frontend', text: '前端工具', icon: <IconHome size="large" />,
             items: [
