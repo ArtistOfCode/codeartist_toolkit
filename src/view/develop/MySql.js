@@ -1,7 +1,10 @@
 import { IconGridSquare } from '@douyinfe/semi-icons';
-import { Button, Form, Layout, Modal, Toast, Tree, useFormApi } from "@douyinfe/semi-ui";
+import { Button, Form, Layout, Modal, Table, Toast, Tree, useFormApi } from "@douyinfe/semi-ui";
 import { useEffect, useState } from "react";
+import { Controlled as CodeMirror } from 'react-codemirror2';
 import mysql from "../../api/mysql";
+
+require('codemirror/mode/sql/sql');
 
 const connection = (setConnect, setVisible, setDatabase, setTable, formApi, databaseFormApi) => {
 
@@ -18,7 +21,7 @@ const connection = (setConnect, setVisible, setDatabase, setTable, formApi, data
                 formApi.setValue('database', values.database)
                 selectDatabse(values.database, setTable)
             }
-            setDatabase(result.map(e => e.Database))
+            setDatabase(result.data.map(e => e.Database))
             Toast.success('数据库连接成功')
         })
         .catch(error => Toast.error(error));
@@ -39,7 +42,7 @@ const selectDatabse = (value, setTable) => {
         .then(() => { return mysql.query('show tables') })
         .then(result => {
             const key = `Tables_in_${value}`
-            setTable(result.map((e, i) => {
+            setTable(result.data.map((e, i) => {
                 return {
                     icon: (<IconGridSquare style={{ color: 'var(--semi-color-text-2)' }} />),
                     label: e[key],
@@ -48,6 +51,12 @@ const selectDatabse = (value, setTable) => {
                 }
             }))
         })
+}
+
+const query = (sql, setResult) => {
+    mysql.query(sql)
+        .then(result => setResult(result))
+        .catch(() => setResult({ fields: [], data: [] }))
 }
 
 const FormField = ({ setTable }) => {
@@ -105,6 +114,18 @@ const MySQL = () => {
     const { Header, Sider, Content } = Layout
 
     const [table, setTable] = useState([])
+    const [sql, setSql] = useState('SELECT 1')
+    const [columns, setColumns] = useState([])
+    const [result, setResult] = useState({ fields: [], data: [] })
+
+    useEffect(() => {
+        setColumns(result.fields.map((v) => {
+            return {
+                title: v.name,
+                dataIndex: v.name,
+            }
+        }))
+    }, [result])
 
     return <>
         <Layout>
@@ -117,10 +138,19 @@ const MySQL = () => {
                 </Sider>
                 <Content>
                     <div style={{ marginLeft: 10, height: 350, border: '1px solid var(--semi-color-border)' }}>
-                        Content
+                        <CodeMirror
+                            value={sql}
+                            options={{
+                                mode: 'text/x-mysql',
+                                theme: 'material',
+                                lineNumbers: true,
+                            }}
+                            onBeforeChange={(editor, data, value) => { setSql(value) }}
+                        />
+                        <Button theme='solid' style={{ margin: 10 }} onClick={() => query(sql, setResult)}>查询</Button>
                     </div>
-                    <div style={{ marginLeft: 10, height: 298, border: '1px solid var(--semi-color-border)' }}>
-                        Content
+                    <div style={{ marginLeft: 10, minHeight: 298, border: '1px solid var(--semi-color-border)' }}>
+                        <Table columns={columns} dataSource={result.data} pagination={false} />
                     </div>
                 </Content>
             </Layout>
