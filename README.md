@@ -1,6 +1,17 @@
-# Getting Started with Create React App
+# CodeArtist Toolkit
+
+![](https://img.shields.io/badge/%E5%85%AC%E4%BC%97%E5%8F%B7-CodeArtist-brightgreen)
+[![GitHub issues](https://img.shields.io/github/issues/ArtistOfCode/codeartist_toolkit)](https://github.com/ArtistOfCode/codeartist_toolkit/issues)
+[![GitHub forks](https://img.shields.io/github/forks/ArtistOfCode/codeartist_toolkit)](https://github.com/ArtistOfCode/codeartist_toolkit/network)
+[![GitHub stars](https://img.shields.io/github/stars/ArtistOfCode/codeartist_toolkit)](https://github.com/ArtistOfCode/codeartist_toolkit/stargazers)
+![GitHub license](https://img.shields.io/github/license/ArtistOfCode/codeartist_toolkit)
+![language](https://img.shields.io/github/languages/top/ArtistOfCode/codeartist_toolkit)
+![last](https://img.shields.io/github/last-commit/ArtistOfCode/codeartist_toolkit)
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+> website
 
 ## Available Scripts
 
