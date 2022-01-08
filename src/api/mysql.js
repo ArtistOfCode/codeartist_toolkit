@@ -3,15 +3,20 @@ import axios from "axios";
 
 axios.defaults.baseURL = 'http://localhost:8888';
 axios.interceptors.response.use(resp => {
-    if (resp.status !== 200) {
-        Toast.error(resp.statusText);
-        return Promise.reject(resp);
+    if (resp.status === 200) {
+        return resp.data;
     }
-    if (resp.data.status !== 0) {
-        Toast.error(resp.data.msg);
-        return Promise.reject(resp.data.msg);
+    return Promise.reject(resp.data);
+}, error => {
+    const { status, data } = error.response;
+    if (status === 400) {
+        console.warn(data);
+        Toast.warning(data.error);
+    } else if (status === 500) {
+        console.error(data);
+        Toast.error(data.error);
     }
-    return resp.data.data;
+    return Promise.reject(data);
 })
 
 const mysql = {
