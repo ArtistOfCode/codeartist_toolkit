@@ -2,7 +2,6 @@ import { IconArrowLeft, IconArrowRight } from '@douyinfe/semi-icons';
 import { Button, Col, Form, Row, Space, Toast, useFormApi, useFormState } from "@douyinfe/semi-ui";
 import NodeRSA from 'node-rsa';
 import React from 'react';
-import { FileUtil } from '../../util/Utils';
 
 
 const generateKey = (values, api) => {
@@ -13,16 +12,11 @@ const generateKey = (values, api) => {
     api.setValue('publicKey', key.exportKey(keyType + '-public'));
 }
 
-const importKey = (privateKey, values, api) => {
-    if (privateKey) {
-        FileUtil.read()
-            .then(([, file]) => file.text())
-            .then(text => api.setValue('privateKey', text));
-    } else {
-        FileUtil.read()
-            .then(([, file]) => file.text())
-            .then(text => api.setValue('publicKey', text));
-    }
+const importKey = (privateKey, api) => {
+    window.showOpenFilePicker()
+        .then(([fileHandle]) => fileHandle.getFile())
+        .then(file => file.text())
+        .then(text => api.setValue(privateKey ? 'privateKey' : 'publicKey', text))
 }
 
 const encrypt = (values, api) => {
@@ -106,9 +100,9 @@ const FormField = () => {
                     <Button theme='solid' type='primary' size='small'
                         onClick={() => generateKey(values, formApi)}>生成</Button>
                     <Button icon={<IconArrowLeft size='small' />} theme='solid' type='primary' size='small'
-                        onClick={() => importKey(true, values, formApi)}>导入</Button>
+                        onClick={() => importKey(true, formApi)}>导入</Button>
                     <Button icon={<IconArrowRight size='small' />} theme='solid' type='primary' size='small'
-                        onClick={() => importKey(false, values, formApi)}>导入</Button>
+                        onClick={() => importKey(false, formApi)}>导入</Button>
                 </Space>
             </Col>
             <Col span={8} align='center'>

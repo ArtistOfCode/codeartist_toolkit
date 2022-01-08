@@ -9,16 +9,4 @@ const MathUtil = {
     }
 }
 
-const FileUtil = {
-    read: async () => {
-        let [fileHandle] = await window.showOpenFilePicker();
-        return [fileHandle, await fileHandle.getFile()];
-    },
-    write: async (fileHandle, contents) => {
-        const writable = await fileHandle.createWritable();
-        await writable.write(contents);
-        await writable.close();
-    }
-}
-
-export { MathUtil, FileUtil }
+export { MathUtil }

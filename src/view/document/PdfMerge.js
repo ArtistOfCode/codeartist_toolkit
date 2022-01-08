@@ -1,57 +1,65 @@
-import { IconUpload } from "@douyinfe/semi-icons";
-import { Button, Form, Table, Toast } from "@douyinfe/semi-ui";
+import { IconDelete, IconUpload } from "@douyinfe/semi-icons";
+import { Button, Form, InputNumber, Row, Space, Table } from "@douyinfe/semi-ui";
+import { useState } from "react";
 
+const { Label } = Form
+const { Column } = Table
 
-const merge = async (api, values) => {
-    const { fileSelect } = values;
-    console.table(fileSelect)
-    // TODO PDF合并和拆分前端还不知道怎么实现
-    // let [fileHandle, file] = await FileUtil.read()
-    // const contents = await file.text();
-    // console.info(contents)
-    // FileUtil.write(fileHandle, '1234567')
-    Toast.warning('网页版暂未实现，请下载本地软件')
-}
+const pickerOpts = {
+    types: [
+        { description: '只能上传PDF文件', accept: { 'application/pdf': ['.pdf'] } },
+    ],
+    excludeAcceptAllOption: true,
+    multiple: false
+};
 
-const columns = [
-    {
-        title: '序号',
-        dataIndex: 'key',
-        render: (text, record, index) => index + 1,
-    },
-    {
-        title: '文件名称',
-        dataIndex: 'name',
-        render: (text, recode, index) => <a target='_blank' rel='noopener noreferrer' href={recode.url}>{text}</a>
-    },
-    {
-        title: '文件大小',
-        dataIndex: 'size',
-    },
-]
-
-const rowSelection = (api, values) => {
-    return {
-        onChange: (keys, rows) => api.setValue('fileSelect', rows)
-    }
-}
+const Num = () => <InputNumber innerButtons min={1} style={{ width: 50 }} />
 
 const PdfMerge = () => {
 
-    const { Upload, Label } = Form
+    const [files, setFiles] = useState([]);
+
+    const upload = () => {
+        window.showOpenFilePicker(pickerOpts)
+            .then(([fileHandle]) => fileHandle.getFile())
+            .then(file => {
+                const f = {
+                    name: file.name,
+                    size: `${Math.round(file.size / 1024)}Kb`,
+                    url: URL.createObjectURL(file),
+                }
+                setFiles([...files, f]);
+            })
+    }
+
+    const merge = () => {
+    }
+
+    const clear = () => {
+    }
 
     return (
-        <Form initValues={{ file: [] }} render={({ formApi, values }) => (
-            <>
-                <Upload field='file' noLabel multiple action='false' accept='.pdf' uploadTrigger='custom'>
-                    <Button icon={<IconUpload />} theme="light">上传文件</Button>
-                </Upload>
-                <Label>文件信息：</Label>
-                <Table rowKey='uid' columns={columns} dataSource={values.file} rowSelection={rowSelection(formApi, values)} />
-                <Button onClick={() => merge(formApi, values)}>合并PDF</Button>
-                <Button style={{ marginLeft: '20px' }} onClick={() => window.open("https://github.com/torakiki/pdfsam/releases")}>下载本地软件</Button>
-            </>
-        )} />
+        <>
+            <Row>
+                <Label>文件列表：</Label>
+                <Table rowKey='uid' dataSource={files} pagination={false} bordered size="small">
+                    <Column title='序号' dataIndex="key" align="center"
+                        render={(text, record, i) => i + 1} />
+                    <Column title='文件名称' dataIndex="name" align="center"
+                        render={(text, recode) => <a target='_blank' rel='noopener noreferrer' href={recode.url}>{text}</a>} />
+                    <Column title='文件大小' dataIndex="size" align="center" />
+                    <Column title='页码' dataIndex="page" align="center"
+                        render={() => <><Num /> - <Num /></>} />
+                    <Column title='操作' dataIndex="operate" align="center"
+                        render={() => <Button icon={<IconDelete />} theme='borderless' onClick={() => { }} />} />
+                </Table>
+            </Row>
+            <Space spacing="medium" style={{ marginTop: 15 }}>
+                <Button icon={<IconUpload />} theme="light" onClick={() => upload(files, setFiles)}>上传</Button>
+                <Button onClick={() => merge()}>合并</Button>
+                <Button onClick={() => clear()}>清空</Button>
+            </Space>
+        </>
     )
 }
 

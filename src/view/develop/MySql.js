@@ -58,9 +58,7 @@ const query = (sql, setResult, history, setHistory) => {
     mysql.query(sql)
         .then(result => {
             setResult(result);
-            let his = history.filter(h => h.command !== sql);
-            his.unshift({ command: sql })
-            setHistory(his)
+            setHistory([{ command: sql }, ...history.filter(h => h.command !== sql)])
         })
         .catch(() => setResult({ fields: [], data: [] }))
 }
