@@ -1,8 +1,9 @@
 import { IconGridSquare } from '@douyinfe/semi-icons';
-import { Button, Form, Layout, Modal, Table, Toast, Tree, useFormApi } from "@douyinfe/semi-ui";
+import { Button, Col, Form, Layout, Modal, Row, Table, Toast, Tree, useFormApi } from "@douyinfe/semi-ui";
 import { useEffect, useState } from "react";
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import mysql from "../../api/mysql";
+import ClientHistory from '../../components/ClientHistory';
 
 require('codemirror/mode/sql/sql');
 
@@ -53,9 +54,14 @@ const selectDatabse = (value, setTable) => {
         })
 }
 
-const query = (sql, setResult) => {
+const query = (sql, setResult, history, setHistory) => {
     mysql.query(sql)
-        .then(result => setResult(result))
+        .then(result => {
+            setResult(result);
+            let his = history.filter(h => h.command !== sql);
+            his.unshift({ command: sql })
+            setHistory(his)
+        })
         .catch(() => setResult({ fields: [], data: [] }))
 }
 
@@ -114,6 +120,7 @@ const MySQL = () => {
     const { Header, Sider, Content } = Layout
 
     const [table, setTable] = useState([])
+    const [history, setHistory] = useState([])
     const [sql, setSql] = useState('SELECT 1')
     const [columns, setColumns] = useState([])
     const [result, setResult] = useState({ fields: [], data: [] })
@@ -137,21 +144,26 @@ const MySQL = () => {
                     <Tree treeData={table} filterTreeNode showFilteredOnly style={{ width: 260, height: 650, border: '1px solid var(--semi-color-border)' }} />
                 </Sider>
                 <Content>
-                    <div style={{ marginLeft: 10, height: 350, border: '1px solid var(--semi-color-border)' }}>
-                        <CodeMirror
-                            value={sql}
-                            options={{
-                                mode: 'text/x-mysql',
-                                theme: 'material',
-                                lineNumbers: true,
-                            }}
-                            onBeforeChange={(editor, data, value) => { setSql(value) }}
-                        />
-                        <Button theme='solid' style={{ margin: 10 }} onClick={() => query(sql, setResult)}>查询</Button>
-                    </div>
-                    <div style={{ marginLeft: 10, minHeight: 298, border: '1px solid var(--semi-color-border)' }}>
+                    <Row style={{ height: 350 }}>
+                        <Col span={14}>
+                            <CodeMirror
+                                value={sql}
+                                options={{
+                                    mode: 'text/x-mysql',
+                                    theme: 'material',
+                                    lineNumbers: true,
+                                }}
+                                onBeforeChange={(editor, data, value) => { setSql(value) }}
+                            />
+                            <Button theme='solid' style={{ margin: 10 }} onClick={() => query(sql, setResult, history, setHistory)}>查询</Button>
+                        </Col>
+                        <Col span={9} style={{ marginLeft: 20 }}>
+                            <ClientHistory items={history} recover={setSql} />
+                        </Col>
+                    </Row>
+                    <Row style={{ marginLeft: 10, minHeight: 298, border: '1px solid var(--semi-color-border)' }}>
                         <Table columns={columns} dataSource={result.data} pagination={false} />
-                    </div>
+                    </Row>
                 </Content>
             </Layout>
         </Layout>
