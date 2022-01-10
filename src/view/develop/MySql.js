@@ -12,13 +12,7 @@ const { Select, Input, InputNumber } = Form
 
 const FormField = ({ setTable }) => {
 
-    const initValues = {
-        "host": "idatafun.com",
-        "port": 3307,
-        "user": "idatafun-test",
-        "password": "26bfeb7bba504e28ac8c8c791ed5f99a",
-        "database": "idatafun"
-    }
+    const initValues = { "port": 3306, }
 
     const formApi = useFormApi()
     const [conn, setConn] = useState(false)
@@ -151,7 +145,7 @@ const MySQL = () => {
                         </Col>
                     </Row>
                     <Row style={{ marginLeft: 10, minHeight: 298, border: '1px solid var(--semi-color-border)' }}>
-                        <Table columns={columns} dataSource={result.data} pagination={false} />
+                        <Table columns={columns} dataSource={result.data} pagination={false} scroll={{ x: 'max-content' }} />
                     </Row>
                 </Content>
             </Layout>
