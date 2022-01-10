@@ -14,15 +14,6 @@ const pickerOpts = {
     multiple: false
 };
 
-const Num = ({ value, min, max, onChange }) => {
-
-    const [val, setVal] = useState(value)
-
-    return <InputNumber innerButtons
-        min={min} max={max} value={val} style={{ width: 50 }}
-        onChange={v => onChange(v, setVal)}
-    />
-}
 
 const PdfMerge = () => {
 
@@ -47,23 +38,43 @@ const PdfMerge = () => {
             })
     }
 
-    const selectPage = (start, id, val, setVal) => {
-        // TODO 还不能支持最大值最小值联动
-        files.forEach((item, i) => {
-            if (item.id === id) {
-                item[start ? 'start' : 'end'] = val;
-                files[i] = item;
-                return;
-            }
-        })
-        setVal(val)
-        setFiles(files)
-    }
-
     const merge = () => {
     }
 
     const clear = () => {
+    }
+
+    const Num = ({ record }) => {
+
+        const [start, setStart] = useState(record.start)
+        const [end, setEnd] = useState(record.end)
+
+        const page = (isStart, val) => {
+            files.forEach((item, i) => {
+                if (item.id === record.id) {
+                    if (isStart) {
+                        item.start = val;
+                        setStart(val)
+                    } else {
+                        item.end = val;
+                        setEnd(val)
+                    }
+                    files[i] = item;
+                    return;
+                }
+            })
+            setFiles(files)
+        }
+
+        return <>
+            <InputNumber innerButtons
+                min={1} max={record.end} value={start} style={{ width: 50 }}
+                onChange={v => page(true, v)}
+            /> - <InputNumber innerButtons
+                min={record.start} max={record.max} value={end} style={{ width: 50 }}
+                onChange={v => page(false, v)}
+            />
+        </>
     }
 
     return (
@@ -72,17 +83,12 @@ const PdfMerge = () => {
                 <Label>文件列表：</Label>
                 <Table rowKey='id' dataSource={files} pagination={false} bordered size="small">
                     <Column title='序号' dataIndex="key" align="center"
-                        render={(text, record, i) => i + 1} />
+                        render={(_t, _r, i) => i + 1} />
                     <Column title='文件名称' dataIndex="name" align="center"
                         render={(text, record) => <a target='_blank' rel='noopener noreferrer' href={record.url}>{text}</a>} />
                     <Column title='文件大小' dataIndex="size" align="center" />
                     <Column title='页码' dataIndex="page" align="center"
-                        render={(text, record) => <>
-                            <Num value={record.start} min={1} max={record.end} onChange={(n, setVal) => selectPage(true, record.id, n, setVal)}
-                            /> - <Num
-                                value={record.end} min={record.start} max={record.max} onChange={(n, setVal) => selectPage(false, record.id, n, setVal)}
-                            />
-                        </>} />
+                        render={(_t, record) => <Num record={record} />} />
                     <Column title='操作' dataIndex="operate" align="center"
                         render={() => <Button icon={<IconDelete />} theme='borderless' onClick={() => { }} />} />
                 </Table>
