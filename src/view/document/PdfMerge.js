@@ -1,4 +1,4 @@
-import { IconDelete, IconUpload } from "@douyinfe/semi-icons";
+import { IconClear, IconDelete, IconUpload, IconWrench } from "@douyinfe/semi-icons";
 import { Button, Form, InputNumber, Row, Space, Table, Toast, Typography } from "@douyinfe/semi-ui";
 import { useState } from "react";
 import pdf from "../../api/pdf";
@@ -110,22 +110,20 @@ const PdfMerge = () => {
             <Row>
                 <Label>文件列表：</Label>
                 <Table rowKey='id' dataSource={files} pagination={false} bordered size="small">
-                    <Column title='序号' dataIndex="key" align="center"
-                        render={(_t, _r, i) => i + 1} />
+                    <Column title='序号' dataIndex="key" align="center" render={(_t, _r, i) => i + 1} />
                     <Column title='文件名称' dataIndex="name" align="center"
                         render={(text, record) => <a target='_blank' rel='noopener noreferrer' href={record.url}>{text}</a>} />
                     <Column title='文件大小' dataIndex="size" align="center" />
-                    <Column title='页码' dataIndex="page" align="center"
-                        render={(_t, record) => <Num record={record} />} />
+                    <Column title='页码' dataIndex="page" align="center" render={(_t, record) => <Num record={record} />} />
                     <Column title='操作' dataIndex="operate" align="center"
                         render={(_t, record) => <Button icon={<IconDelete />} theme='borderless' onClick={() => remove(record.id)} />} />
                 </Table>
             </Row>
             <Space spacing="medium" style={{ marginTop: 15 }}>
-                <Button icon={<IconUpload />} theme="light" onClick={() => upload(files, setFiles)}>上传</Button>
-                <Button onClick={() => merge()}>合并</Button>
-                <Button onClick={() => clear()}>清空</Button>
-                {result && <Text link={{ href: result.url }}>下载合并结果：{result.file}</Text>}
+                <Button icon={<IconUpload />} onClick={upload}>上传</Button>
+                <Button icon={<IconWrench />} onClick={merge}>合并</Button>
+                <Button icon={<IconClear />} onClick={clear}>清空</Button>
+                {result && <Text link={{ href: result.url }}>下载结果：{result.file}</Text>}
             </Space>
         </>
     )
