@@ -1,10 +1,13 @@
 import { IconDelete, IconUpload } from "@douyinfe/semi-icons";
-import { Button, Form, InputNumber, Row, Space, Table } from "@douyinfe/semi-ui";
+import { Button, Form, InputNumber, Row, Space, Table, Toast, Typography } from "@douyinfe/semi-ui";
 import { useState } from "react";
 import pdf from "../../api/pdf";
+import tmp from "../../api/tmp";
+import ToolTitle from "../../components/ToolTitle";
 
 const { Label } = Form
 const { Column } = Table
+const { Text } = Typography
 
 const pickerOpts = {
     types: [
@@ -14,10 +17,10 @@ const pickerOpts = {
     multiple: false
 };
 
-
 const PdfMerge = () => {
 
     const [files, setFiles] = useState([]);
+    const [result, setResult] = useState(null);
 
     const upload = () => {
         window.showOpenFilePicker(pickerOpts)
@@ -38,10 +41,34 @@ const PdfMerge = () => {
             })
     }
 
+    const remove = (id) => {
+        setFiles(files.filter(f => f.id !== id))
+        tmp.delete([id])
+    }
+
     const merge = () => {
+        if (!files || files.length < 1) {
+            Toast.warning('文件不能为空')
+            return;
+        }
+        const pdfs = files.map(f => {
+            return {
+                page: `${f.start}-${f.end}`,
+                name: f.id
+            }
+        })
+        pdf.merge({ pdfs })
+            .then(data => setResult({ file: data.pdf, url: tmp.get(data.pdf) }));
     }
 
     const clear = () => {
+        setFiles([])
+        let rmFiles = files.map(f => f.id)
+        if (result) {
+            rmFiles = [...rmFiles, result.file]
+            setResult(null)
+        }
+        tmp.delete(rmFiles)
     }
 
     const Num = ({ record }) => {
@@ -79,6 +106,7 @@ const PdfMerge = () => {
 
     return (
         <>
+            <ToolTitle text='PDF合并' pro />
             <Row>
                 <Label>文件列表：</Label>
                 <Table rowKey='id' dataSource={files} pagination={false} bordered size="small">
@@ -90,13 +118,14 @@ const PdfMerge = () => {
                     <Column title='页码' dataIndex="page" align="center"
                         render={(_t, record) => <Num record={record} />} />
                     <Column title='操作' dataIndex="operate" align="center"
-                        render={() => <Button icon={<IconDelete />} theme='borderless' onClick={() => { }} />} />
+                        render={(_t, record) => <Button icon={<IconDelete />} theme='borderless' onClick={() => remove(record.id)} />} />
                 </Table>
             </Row>
             <Space spacing="medium" style={{ marginTop: 15 }}>
                 <Button icon={<IconUpload />} theme="light" onClick={() => upload(files, setFiles)}>上传</Button>
                 <Button onClick={() => merge()}>合并</Button>
                 <Button onClick={() => clear()}>清空</Button>
+                {result && <Text link={{ href: result.url }}>下载合并结果：{result.file}</Text>}
             </Space>
         </>
     )

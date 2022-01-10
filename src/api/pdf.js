@@ -7,6 +7,9 @@ const pdf = {
         const formData = new FormData()
         formData.append('file', file)
         return axios.post('/pdf', formData, contentType)
+    },
+    merge: (data) => {
+        return axios.post('/pdf/merge', data)
     }
 }
 
