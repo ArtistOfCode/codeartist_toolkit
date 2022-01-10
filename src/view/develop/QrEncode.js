@@ -2,6 +2,7 @@ import { IconArrowRight } from '@douyinfe/semi-icons';
 import { Button, Col, Form, Row, Space, Toast, useFormApi, useFormState } from "@douyinfe/semi-ui";
 import QrCode from 'qrcode';
 import React from 'react';
+import ToolTitle from '../../components/ToolTitle';
 
 const validator = {
     url: (val) => {
@@ -10,67 +11,67 @@ const validator = {
     }
 }
 
-const wifiProtecel = (values) => {
-    const { S, T, P, H } = values;
-    return `WIFI:S:${S || ''};T:${T || ''};P:${T === 'nopass' ? '' : P || ''};${H ? 'H:true' : ''};`
-}
-
-const vcardProtecel = (values) => {
-    const { N, NICKNAME, TEL, EMAIL, ADR } = values;
-    let res = 'BEGIN:VCARD\nVERSION:3.0\n'
-    if (N) res += 'N:' + N + '\n'
-    if (NICKNAME) res += 'NICKNAME:' + NICKNAME + '\n'
-    if (TEL) res += 'TEL:' + TEL + '\n'
-    if (EMAIL) res += 'EMAIL:' + EMAIL + '\n'
-    if (ADR) res += 'ADR:' + ADR + '\n'
-    res += 'END:VCARD'
-    return res;
-}
-
-const encode = (state, api) => {
-    const { type, leftData } = state.values;
-    let data = leftData;
-    if (type === 'wifi') {
-        data = wifiProtecel(state.values)
-        console.debug('WIFI:', data)
-    }
-    if (type === 'vcard') {
-        data = vcardProtecel(state.values)
-        console.debug('VCARD:', data)
-    }
-    if (!data) {
-        Toast.error('编码数据不能为空')
-        return
-    }
-    if (type === 'url') {
-        const valid = validator.url(leftData, state.setValue)
-        if (valid !== '') {
-            Toast.error(valid)
-            return
-        }
-    }
-
-    QrCode.toDataURL(data)
-        .then(d => api.setValue('rightData', d))
-        .catch(e => {
-            Toast.error('编码异常')
-            console.error(e)
-        })
-}
+const { RadioGroup, Radio, Label, Input, TextArea, Slot, Select, Switch } = Form;
 
 const FormField = () => {
 
-    const { RadioGroup, Radio, Label, Input, TextArea, Slot, Select, Switch } = Form;
     const inputStyle = { width: '300px' }
 
     const formApi = useFormApi()
     const formState = useFormState()
     const values = formState.values
 
+    const wifiProtecel = () => {
+        const { S, T, P, H } = values;
+        return `WIFI:S:${S || ''};T:${T || ''};P:${T === 'nopass' ? '' : P || ''};${H ? 'H:true' : ''};`
+    }
+
+    const vcardProtecel = () => {
+        const { N, NICKNAME, TEL, EMAIL, ADR } = values;
+        let res = 'BEGIN:VCARD\nVERSION:3.0\n'
+        if (N) res += 'N:' + N + '\n'
+        if (NICKNAME) res += 'NICKNAME:' + NICKNAME + '\n'
+        if (TEL) res += 'TEL:' + TEL + '\n'
+        if (EMAIL) res += 'EMAIL:' + EMAIL + '\n'
+        if (ADR) res += 'ADR:' + ADR + '\n'
+        res += 'END:VCARD'
+        return res;
+    }
+
+    const encode = () => {
+        const { type, leftData } = values;
+        let data = leftData;
+        if (type === 'wifi') {
+            data = wifiProtecel()
+            console.debug('WIFI:', data)
+        }
+        if (type === 'vcard') {
+            data = vcardProtecel()
+            console.debug('VCARD:', data)
+        }
+        if (!data) {
+            Toast.error('编码数据不能为空')
+            return
+        }
+        if (type === 'url') {
+            const valid = validator.url(leftData)
+            if (valid !== '') {
+                Toast.error(valid)
+                return
+            }
+        }
+
+        QrCode.toDataURL(data)
+            .then(d => formApi.setValue('rightData', d))
+            .catch(e => {
+                Toast.error('编码异常')
+                console.error(e)
+            })
+    }
+
     return <>
         <Row>
-            <RadioGroup field='type' span={24} label='编码方式：' type='button' buttonSize='middle'
-                onChange={v => formApi.setValues({ leftData: null, rightData: null })}>
+            <RadioGroup field='type' span={24} label='编码方式：' type='button' onChange={v => formApi.setValues({ leftData: null })}>
                 <Radio value='text'>文本</Radio>
                 <Radio value='url'>网址</Radio>
                 <Radio value='vcard'>电子名片</Radio>
@@ -80,9 +81,8 @@ const FormField = () => {
         <Row type='flex' align='top'>
             <Col span={8}>
                 {values.type === 'text' && <TextArea showClear rows={15} label='编码内容：' field='leftData' />}
-                {values.type === 'url' && <TextArea showClear placeholder='请输入网站链接' rows={15}
-                    validate={validator.url}
-                    label='编码内容：' field='leftData' />}
+                {values.type === 'url' && <TextArea showClear placeholder='请输入网站链接' rows={15} label='编码内容：' field='leftData'
+                    validate={validator.url} />}
                 {values.type === 'wifi' &&
                     <>
                         <Label style={{ paddingTop: '12px' }}>WIFI信息：</Label>
@@ -130,7 +130,10 @@ const QrEncode = () => {
 
     const initValues = { type: 'text', T: 'WPA', rightData: '' }
 
-    return <Form initValues={initValues}><FormField /></Form>
+    return <>
+        <ToolTitle text='二维码' />
+        <Form initValues={initValues}><FormField /></Form>
+    </>
 }
 
 export default QrEncode;

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import mysql from "../../api/mysql";
 import ClientHistory from '../../components/ClientHistory';
+import ToolTitle from '../../components/ToolTitle';
 
 require('codemirror/mode/sql/sql');
 
@@ -133,6 +134,7 @@ const MySQL = () => {
     }, [result])
 
     return <>
+        <ToolTitle text='MySQL客户端' pro />
         <Layout>
             <Header>
                 <Form layout='horizontal'><FormField setTable={setTable} /></Form>
@@ -144,15 +146,8 @@ const MySQL = () => {
                 <Content>
                     <Row style={{ height: 350 }}>
                         <Col span={14}>
-                            <CodeMirror
-                                value={sql}
-                                options={{
-                                    mode: 'text/x-mysql',
-                                    theme: 'material',
-                                    lineNumbers: true,
-                                }}
-                                onBeforeChange={(editor, data, value) => { setSql(value) }}
-                            />
+                            <CodeMirror value={sql} options={{ mode: 'text/x-mysql', theme: 'material', lineNumbers: true }}
+                                onBeforeChange={(_e, _d, value) => { setSql(value) }} />
                             <Button theme='solid' style={{ margin: 10 }} onClick={() => query(sql, setResult, history, setHistory)}>查询</Button>
                         </Col>
                         <Col span={9} style={{ marginLeft: 20 }}>

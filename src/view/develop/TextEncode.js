@@ -1,6 +1,7 @@
 import { IconArrowLeft, IconArrowRight } from '@douyinfe/semi-icons';
-import { Button, Col, Form, Row, Space, Toast, useFormApi } from "@douyinfe/semi-ui";
+import { Button, Col, Form, Row, Space, Toast, useFormApi, useFormState } from "@douyinfe/semi-ui";
 import React from 'react';
+import ToolTitle from "../../components/ToolTitle";
 
 const operate = {
     url: (data, op) => op ? encodeURI(data) : decodeURI(data),
@@ -8,40 +9,38 @@ const operate = {
     base64: (data, op) => op ? Buffer.from(data).toString('base64') : Buffer.from(data, 'base64').toString(),
 }
 
-const encode = api => {
-    const { type, leftData } = api.getValues();
-    const data = leftData;
-    if (!data) {
-        Toast.error('编码数据不能为空')
-        return
-    }
-    api.setValue('rightData', operate[type](data, true))
-}
-
-const decode = api => {
-    const { type, rightData } = api.getValues();
-    const data = rightData;
-    if (!data) {
-        Toast.error('解码数据不能为空')
-        return
-    }
-    try {
-        api.setValue('leftData', operate[type](data, false))
-    } catch (error) {
-        Toast.error('解码异常')
-    }
-}
+const { RadioGroup, Radio, TextArea } = Form;
 
 const FormField = () => {
 
-    const { RadioGroup, Radio, TextArea } = Form;
-
     const formApi = useFormApi()
+    const formState = useFormState()
+
+    const encode = () => {
+        const { type, leftData } = formState.values;
+        if (!leftData) {
+            Toast.error('编码数据不能为空')
+            return
+        }
+        formApi.setValue('rightData', operate[type](leftData, true))
+    }
+
+    const decode = () => {
+        const { type, rightData } = formState.values;
+        if (!rightData) {
+            Toast.error('解码数据不能为空')
+            return
+        }
+        try {
+            formApi.setValue('leftData', operate[type](rightData, false))
+        } catch (error) {
+            Toast.error('解码异常')
+        }
+    }
 
     return <>
         <Row>
-            <RadioGroup field='type' span={24} label='编码方式：' type='button' buttonSize='middle'
-                onChange={v => formApi.setValue('rightData', null)}>
+            <RadioGroup field='type' span={24} label='编码方式：' type='button' onChange={() => formApi.setValue('rightData', null)}>
                 <Radio value='url'>URL</Radio>
                 <Radio value='hex'>Hex</Radio>
                 <Radio value='base64'>Base64</Radio>
@@ -53,10 +52,8 @@ const FormField = () => {
             </Col>
             <Col span={2} align='center'>
                 <Space vertical>
-                    <Button icon={<IconArrowRight size='small' />} theme='solid' type='primary' size='small'
-                        onClick={() => encode(formApi)}>编码</Button>
-                    <Button icon={<IconArrowLeft size='small' />} theme='solid' type='primary' size='small'
-                        onClick={() => decode(formApi)}>解码</Button>
+                    <Button icon={<IconArrowRight size='small' />} theme='solid' type='primary' size='small' onClick={encode}>编码</Button>
+                    <Button icon={<IconArrowLeft size='small' />} theme='solid' type='primary' size='small' onClick={decode}>解码</Button>
                 </Space>
             </Col>
             <Col span={8}>
@@ -67,6 +64,9 @@ const FormField = () => {
 }
 
 const TextEncode = () =>
-    <Form initValues={{ type: 'url' }}><FormField /></Form>
+    <>
+        <ToolTitle text='文本编码' />
+        <Form initValues={{ type: 'url' }}><FormField /></Form>
+    </>
 
 export default TextEncode;
